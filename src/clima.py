@@ -1,5 +1,5 @@
 import requests
-from src.apis import Weather_API
+from apis import Weather_API
 
 def obtener_clima(ciudad, pais, clave_api):
     url = f"http://api.openweathermap.org/data/2.5/weather?q={ciudad},{pais}&appid={clave_api}&lang=es&units=metric"

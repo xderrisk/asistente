@@ -1,5 +1,5 @@
 import google.generativeai as genai
-from src.apis import Gemini_API
+from apis import Gemini_API
 from tiempo import Tiempo
 
 class ChatIAGenerativa:

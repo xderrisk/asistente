@@ -1,5 +1,5 @@
 from elevenlabs.client import ElevenLabs
-from src.apis import ElevenLabs_API
+from apis import ElevenLabs_API
 from elevenlabs import play
 
 class Respuesta:
