@@ -1,7 +1,7 @@
 from grabadora import GrabadoraVoz
 from aat import AudioATexto
 from ia import ChatIAGenerativa
-#from voz import Respuesta
+from voz import Respuesta
 
 if __name__ == "__main__":
 
@@ -9,7 +9,7 @@ if __name__ == "__main__":
     grabadora = GrabadoraVoz()
 
     # voz a texto
-    audio = AudioATexto("grabacion.wav")
+    audio = AudioATexto("media/grabacion.wav")
     texto = audio.convertir()
 
     # chat ia de google
@@ -17,4 +17,4 @@ if __name__ == "__main__":
     respuesta = chat.send_message(texto)
 
     # texto a voz
-    #voz = Respuesta(respuesta)
+    voz = Respuesta(respuesta)

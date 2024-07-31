@@ -19,5 +19,5 @@ class AudioATexto:
             print(f"No se pudo conectar con el servicio de Google Speech Recognition; {e}")
 
 if __name__ == "__main__":
-    audio_a_text = AudioATexto("grabacion.wav")
+    audio_a_text = AudioATexto("media/grabacion.wav")
     audio_a_text.convertir()

@@ -3,12 +3,13 @@ import numpy as np
 import wavio
 import threading
 import time
+import os
 
 class GrabadoraVoz:
     def __init__(self):
         self.frecuencia_muestreo = 44100
         self.canales = 2
-        self.nombre_archivo = 'grabacion.wav'
+        self.nombre_archivo = os.path.join('media', 'grabacion.wav')
         self.frames = []
         self.grabando = False
         self.ultimo_sonido = time.time()
