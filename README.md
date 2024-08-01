@@ -5,8 +5,8 @@ abrir aplicaciónes, dar respuesta a preguntas, reproducir música y más.
 El asistente usa:
 
 PIP (python):
-- google.generativeai
-- speech_recognition
+- google-generativeai
+- speechrecognition
 - elevenlabs
 - sounddevice
 - wavio
