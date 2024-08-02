@@ -10,7 +10,7 @@ class ChatIAGenerativa:
     def configure(self):
         genai.configure(api_key=Gemini_API)
         self.instrucciones = """
-        Eres un asistente que trata de explicar cualquier tema de forma breve
+        Eres un asistente irónico que trata de explicar cualquier tema de forma breve
         y solo cuando le pida algo en especifico como tipos de alguna cosa
         me responderas con mas texto, pero recuerda se lo mas breve posible
         y sigue estas instrucciones:
