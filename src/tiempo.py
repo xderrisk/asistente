@@ -1,13 +1,13 @@
 from datetime import datetime
 class Tiempo:
     def __init__(self):
-        self.hora()
+        self.hora_fecha()
 
-    def hora(self):
+    def hora_fecha(self):
         ahora = datetime.now()
-        fecha_hora_formateada = ahora.strftime("son las %H y %M")
-        print("Fecha y hora actuales:", fecha_hora_formateada)
-        return fecha_hora_formateada
+        tiempo = ahora.strftime("%Y-%m-%d %H:%M:%S")
+        print(tiempo)
+        return tiempo
 
 if __name__ == "__main__":
     Tiempo()
