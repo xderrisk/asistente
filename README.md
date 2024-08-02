@@ -7,9 +7,13 @@ El asistente usa:
 PIP (python):
 - google-generativeai
 - speechrecognition
-- elevenlabs
+- gtts (alternativa a elevenlabs ya que daba problemas con la version gratuita)
 - sounddevice
 - wavio
 
 SISTEMA (linux):
 - ffmpeg
+- mpg321
+
+SISTEMA (windows):
+- aún no ha sido probado en Windows

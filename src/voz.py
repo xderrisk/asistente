@@ -1,23 +1,30 @@
-from elevenlabs.client import ElevenLabs
-from apis import ElevenLabs_API
-from elevenlabs import play
+from gtts import gTTS
+import platform
+import os
 
-class Respuesta:
+class TextoAVoz:
     def __init__(self, texto):
-        self.texto = texto
-        self.configure()
-        self.voz()
+        texto = texto
+        tts = gTTS(text=texto, lang='es')
+        ruta_voz = os.path.join('media', 'voz.mp3')
+        tts.save(ruta_voz)
 
-    def configure(self):
-        self.client = ElevenLabs(api_key=ElevenLabs_API)
+        sistema = platform.system()
 
-    def voz(self):
-        audio = self.client.generate(
-            text = self.texto,
-            voice = "erKgR0s8Y67t4iiHuA9R"
-        )
-        play(audio)
+        if sistema == "Windows":
+            # Reproducir el archivo de audio en Windows
+            os.system(f"start {ruta_voz}")
+        elif sistema == "Darwin":
+            # Reproducir el archivo de audio en MacOS
+            os.system(f"afplay {ruta_voz}")
+        elif sistema == "Linux":
+            # Reproducir el archivo de audio en Linux
+            os.system(f"mpg321 {ruta_voz}")
+            # o usa ffplay si no tienes mpg321
+            # os.system("ffplay -nodisp -autoexit ejemplo.mp3")
+        else:
+            print("Sistema operativo no soportado.")
 
 if __name__ == "__main__":
     texto = "Prueba"
-    Respuesta(texto)
+    TextoAVoz(texto)
