@@ -19,6 +19,9 @@ class ChatIAGenerativa:
         
         repondeme a lo siguente: 
         """
+        self.functions = {
+            "tiempo": self.tiempo
+        }
 
     def setup_model(self):
         self.generation_config = {
@@ -29,18 +32,33 @@ class ChatIAGenerativa:
             "response_mime_type": "text/plain",
         }
 
-        self.model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            generation_config=self.generation_config,
-        )
-
-        self.chat_session = self.model.start_chat(history=[])
+    def tiempo(self, time:str):
+        return Tiempo().hora_fecha()
+    
+    def call_function(self, function_call, functions):
+        function_name = function_call.name
+        function_args = function_call.args
+        return functions[function_name](**function_args)
 
     def send_message(self, message):
-        response = self.chat_session.send_message(self.instrucciones+message)
+        model = genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            generation_config=self.generation_config,
+            tools=self.functions.values())
+        response = model.generate_content(message)
+        part = response.candidates[0].content.parts[0]
+        if part.function_call:
+            result = self.call_function(part.function_call, self.functions)
+            model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+            response = model.generate_content(
+                f"son las {result} que hora es? muestrame solo la hora en letras no uses asteriscos"
+            )
+        else:
+            model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+            response = model.generate_content(self.instrucciones+message)
         print("\n"+response.text)
         return response.text
 
 if __name__ == "__main__":
     chat_bot = ChatIAGenerativa()
-    response = chat_bot.send_message("La tierra es redonda?")
+    response = chat_bot.send_message("que hora es")
