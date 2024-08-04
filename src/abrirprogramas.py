@@ -4,6 +4,7 @@ class Programas:
         pass
     def abrir(self):
         subprocess.run([programa])
+        return "abriendo"+programa
 
 if __name__ == "__main__":
     programa = "gnome-terminal"

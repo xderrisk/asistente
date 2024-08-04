@@ -1,6 +1,8 @@
 import google.generativeai as genai
 from apis import Gemini_API
-from iafun import Funciones
+from tiempo import Tiempo
+from clima import Clima
+from abrirprogramas import Programas
 
 class ChatIAGenerativa:
     def __init__(self):
@@ -17,7 +19,7 @@ class ChatIAGenerativa:
         3. Se breve
         repondeme a lo siguente: 
         """
-        self.functions = Funciones().funciones()
+        self.functions = FuncionesIA().funciones()
 
     def setup_model(self):
         self.generation_config = {
@@ -52,6 +54,24 @@ class ChatIAGenerativa:
         print("\n"+response.text)
         return response.text
 
+class FuncionesIA:
+    def funciones(self):
+        funtions = {
+            "tiempo": self.tiempo,
+            "clima": self.clima,
+            "abrir": self.abrir
+        }
+        return funtions
+    
+    def tiempo(self, time:str):
+        return Tiempo().hora_fecha()
+    
+    def clima(self, temperatura:str, descripcion:str):
+        return Clima().obtener_clima()
+    
+    def abrir(self, open:str):
+        return Programas().abrir()
+    
 if __name__ == "__main__":
     chat_bot = ChatIAGenerativa()
     response = chat_bot.send_message("que hora es")
