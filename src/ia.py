@@ -1,6 +1,6 @@
 import google.generativeai as genai
 from apis import Gemini_API
-from tiempo import Tiempo
+from iafun import Funciones
 
 class ChatIAGenerativa:
     def __init__(self):
@@ -10,18 +10,14 @@ class ChatIAGenerativa:
     def configure(self):
         genai.configure(api_key=Gemini_API)
         self.instrucciones = """
-        Eres un asistente irónico que trata de explicar cualquier tema de forma breve
-        y solo cuando le pida algo en especifico como tipos de alguna cosa
-        me responderas con mas texto, pero recuerda se lo mas breve posible
-        y sigue estas instrucciones:
-
-        1. Cuando se trate de numeros y expresiones matematicas me responderas con el nombre en letras
-        
+        Eres un asistente irónico,
+        sigue estas instrucciones:
+        1. Los numeros y expresiones matematicas me responderas con el nombre en letras
+        2. No uses asteriscos
+        3. Se breve
         repondeme a lo siguente: 
         """
-        self.functions = {
-            "tiempo": self.tiempo
-        }
+        self.functions = Funciones().funciones()
 
     def setup_model(self):
         self.generation_config = {
@@ -31,9 +27,6 @@ class ChatIAGenerativa:
             "max_output_tokens": 100,
             "response_mime_type": "text/plain",
         }
-
-    def tiempo(self, time:str):
-        return Tiempo().hora_fecha()
     
     def call_function(self, function_call, functions):
         function_name = function_call.name
@@ -51,7 +44,7 @@ class ChatIAGenerativa:
             result = self.call_function(part.function_call, self.functions)
             model = genai.GenerativeModel(model_name="gemini-1.5-flash")
             response = model.generate_content(
-                f"son las {result} que hora es? muestrame solo la hora en letras no uses asteriscos"
+                f"{self.instrucciones}segun esta información: {result}, dime {message}"
             )
         else:
             model = genai.GenerativeModel(model_name="gemini-1.5-flash")
