@@ -1,8 +1,11 @@
 import speech_recognition as sr
+import os
 
 class AudioATexto:
-    def __init__(self, audio_file):
-        self.audio_file = audio_file
+    def __init__(self):
+        self.directorio_madre = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.ruta_media = os.path.join(self.directorio_madre, 'media')
+        self.audio_file = os.path.join(self.ruta_media, 'grabacion.wav')
         self.recognizer = sr.Recognizer()
 
     def convertir(self):
@@ -19,5 +22,5 @@ class AudioATexto:
             print(f"No se pudo conectar con el servicio de Google Speech Recognition; {e}")
 
 if __name__ == "__main__":
-    audio_a_text = AudioATexto("media/grabacion.wav")
+    audio_a_text = AudioATexto()
     audio_a_text.convertir()

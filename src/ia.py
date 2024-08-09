@@ -73,5 +73,4 @@ class FuncionesIA:
         return Programas().abrir()
     
 if __name__ == "__main__":
-    chat_bot = ChatIAGenerativa()
-    response = chat_bot.send_message("que hora es")
+    response = ChatIAGenerativa().send_message("que hora es")

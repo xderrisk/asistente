@@ -9,7 +9,9 @@ class GrabadoraVoz:
     def __init__(self):
         self.frecuencia_muestreo = 44100
         self.canales = 2
-        self.nombre_archivo = os.path.join('media', 'grabacion.wav')
+        directorio_madre = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        ruta_media = os.path.join(directorio_madre, 'media')
+        self.nombre_archivo = os.path.join(ruta_media, 'grabacion.wav')
         self.frames = []
         self.grabando = False
         self.ultimo_sonido = time.time()

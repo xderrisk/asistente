@@ -9,7 +9,7 @@ if __name__ == "__main__":
     grabadora = GrabadoraVoz()
 
     # voz a texto
-    audio = AudioATexto("media/grabacion.wav")
+    audio = AudioATexto()
     texto = audio.convertir()
 
     # chat ia de google
