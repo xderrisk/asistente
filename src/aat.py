@@ -17,9 +17,13 @@ class AudioATexto:
             print(text)
             return text
         except sr.UnknownValueError:
+            text = "No se pudo entender el audio"
             print("Google Speech Recognition no pudo entender el audio")
+            return text
         except sr.RequestError as e:
+            text = "No se pudo conectar con el servicio"
             print(f"No se pudo conectar con el servicio de Google Speech Recognition; {e}")
+            return text
 
 if __name__ == "__main__":
     audio_a_text = AudioATexto()

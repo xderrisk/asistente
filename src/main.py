@@ -12,9 +12,10 @@ if __name__ == "__main__":
     audio = AudioATexto()
     texto = audio.convertir()
 
-    # chat ia de google
-    chat = ChatIAGenerativa()
-    respuesta = chat.send_message(texto)
+    if texto != "No se pudo entender el audio" and "No se pudo conectar con el servicio":
+        # chat ia de google
+        chat = ChatIAGenerativa()
+        respuesta = chat.send_message(texto)
 
-    # texto a voz
-    voz = TextoAVoz(respuesta)
+        # texto a voz
+        voz = TextoAVoz(respuesta)

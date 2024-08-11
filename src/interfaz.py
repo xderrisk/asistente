@@ -1,57 +1,57 @@
-import tkinter as tk
-from PIL import Image, ImageTk
 from grabadora import GrabadoraVoz
 from aat import AudioATexto
 from ia import ChatIAGenerativa
 from voz import TextoAVoz
+import tkinter as tk
 import threading
 import os
 
-def ejecutar_proceso():
-    def proceso_largo():
+def asistente():
+    def proceso():
         # grabacion de voz
+        texto = "Grabando..."
+        root.after(0, lambda: mensaje.config(text=texto))
         grabadora = GrabadoraVoz()
 
         # voz a texto
-        audio = AudioATexto()
-        texto = audio.convertir()
+        texto = AudioATexto().convertir()
 
         # Usar el método after para actualizar la interfaz en el hilo principal
         root.after(0, lambda: mensaje.config(text=texto))
 
-        # chat ia de google
-        chat = ChatIAGenerativa()
-        respuesta = chat.send_message(texto)
+        if texto != "No se pudo entender el audio" and "No se pudo conectar con el servicio":
+            # chat ia de google
+            respuesta = ChatIAGenerativa().send_message(texto)
 
-        # Actualizar la interfaz de usuario en el hilo principal
-        root.after(0, lambda: mensaje.config(text=respuesta))
+            # Actualizar la interfaz de usuario en el hilo principal
+            root.after(0, lambda: mensaje.config(text=respuesta))
 
-        # texto a voz
-        voz = TextoAVoz(respuesta)
+            # texto a voz
+            voz = TextoAVoz(respuesta)
 
     # Ejecutar el proceso largo en un hilo separado
-    threading.Thread(target=proceso_largo, daemon=True).start()
+    threading.Thread(target=proceso, daemon=True).start()
 
 # Crear la ventana principal
 root = tk.Tk()
-root.title("Botón con Imagen")
-root.geometry("300x200")
-root.resizable(False, False)  # Evitar que la ventana se pueda redimensionar
+root.title("Asistente")
+root.geometry("500x150")
+root.resizable(False, False)
 
-# Cargar la imagen con Pillow
+# Cargar la imagen en formato
 directorio_madre = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ruta_media = os.path.join(directorio_madre, 'media', 'microfono.jpg')
-imagen = Image.open(ruta_media)
-imagen = imagen.resize((50, 50), Image.Resampling.LANCZOS)  # Redimensionar la imagen si es necesario
-imagen_tk = ImageTk.PhotoImage(imagen)
+ruta_media = os.path.join(directorio_madre, 'media')
+ruta_imagen = os.path.join(ruta_media, 'microfono.png')
+imagen = tk.PhotoImage(file=ruta_imagen)
+imagen = imagen.subsample(7, 7)
 
-# Crear un botón con imagen
-boton = tk.Button(root, image=imagen_tk, command=ejecutar_proceso)
-boton.pack(pady=20)
+# Crear un widget de etiqueta para mostrar la imagen
+etiqueta_imagen = tk.Button(root, image=imagen, relief='flat', command=asistente)
+etiqueta_imagen.place(relx=0.02, rely=0.5, anchor=tk.W)
 
 # Crear una etiqueta para mostrar el mensaje
-mensaje = tk.Label(root, text="")
-mensaje.pack(pady=20)
+mensaje = tk.Label(root, text="",  font=("Arial", 20), wraplength=300)
+mensaje.pack(side=tk.RIGHT, padx=10)
 
-# Ejecutar la aplicación
+# Ejecutar el bucle principal de Tkinter
 root.mainloop()
