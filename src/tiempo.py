@@ -5,7 +5,7 @@ class Tiempo:
 
     def hora_fecha(self):
         ahora = datetime.now()
-        tiempo = ahora.strftime("%Y-%m-%d %H:%M:%S")
+        tiempo = ahora.strftime("%Y-%m-%d %H:%M")
         return tiempo
 
 if __name__ == "__main__":

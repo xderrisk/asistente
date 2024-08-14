@@ -3,6 +3,7 @@ from apis import Gemini_API
 from tiempo import Tiempo
 from clima import Clima
 from abrirprogramas import Programas
+import platform
 
 class ChatIAGenerativa:
     def __init__(self):
@@ -12,14 +13,13 @@ class ChatIAGenerativa:
     def configure(self):
         genai.configure(api_key=Gemini_API)
         self.instrucciones = """
-        Eres un asistente irónico,
-        sigue estas instrucciones:
+        Eres un asistente, sigue estas instrucciones:
         1. Los numeros y expresiones matematicas me responderas con el nombre en letras
         2. No uses asteriscos
         3. Se breve
         repondeme a lo siguente: 
         """
-        self.functions = FuncionesIA().funciones()
+        self.functions = self.funciones()
 
     def setup_model(self):
         self.generation_config = {
@@ -36,41 +36,63 @@ class ChatIAGenerativa:
         return functions[function_name](**function_args)
 
     def send_message(self, message):
+        self.message = message
         model = genai.GenerativeModel(
             model_name="gemini-1.5-flash",
             generation_config=self.generation_config,
             tools=self.functions.values())
-        response = model.generate_content(message)
+        response = model.generate_content(self.message)
         part = response.candidates[0].content.parts[0]
+        print(part)
         if part.function_call:
-            result = self.call_function(part.function_call, self.functions)
-            model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-            response = model.generate_content(
-                f"{self.instrucciones}segun esta información: {result}, dime {message}"
-            )
+            response = self.call_function(part.function_call, self.functions)
         else:
             model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-            response = model.generate_content(self.instrucciones+message)
-        print("\n"+response.text)
-        return response.text
+            response = model.generate_content(self.instrucciones+self.message)
+            response = response.text
+        print("\n"+response)
+        return response
 
-class FuncionesIA:
     def funciones(self):
         funtions = {
-            "tiempo": self.tiempo,
+            "hora": self.hora,
             "clima": self.clima,
             "abrir": self.abrir
         }
         return funtions
     
-    def tiempo(self, time:str):
-        return Tiempo().hora_fecha()
+    def hora(self, time:str):
+        tiempo = Tiempo().hora_fecha()
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        response = model.generate_content(f"""Dado la siguiente información sobre el tiempo actual: {tiempo}
+                                          - respondeme {self.message}""")
+        print(response)
+        tiempo = response.text
+        return tiempo
     
-    def clima(self, temperatura:str, descripcion:str):
-        return Clima().obtener_clima()
+    def clima(self, ciudad:str, temperatura:str, descripcion:str):
+        clima = Clima().obtener_clima()
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        response = model.generate_content(f"""Dado la siguiente información sobre el clima:
+                                          - lugar: {clima[0]}
+                                          - temperatura: {clima[1]}°
+                                          - descripción: {clima[2]}
+                                          Dime el clima segun la info que te he ofrecido
+                                          (dime el lugar, la temperatura y la descripción)""")
+        print(response)
+        clima = response.text
+        return clima
     
     def abrir(self, open:str):
-        return Programas().abrir()
+        version = platform.version()
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        response = model.generate_content(f"""Dado el nombre de un programa como '{self.message}',
+                                          responde con el nombre exacto del comando que se usa
+                                          para abrir ese programa en la terminal de {version}
+                                          (el texto debe estar en minusculas)""")
+        print(response.text)
+        programa = response.text.strip().lower()
+        return Programas().abrir(programa)
     
 if __name__ == "__main__":
     response = ChatIAGenerativa().send_message("que hora es")

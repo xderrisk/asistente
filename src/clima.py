@@ -26,7 +26,7 @@ class Clima:
         else:
             print(f"No se pudo obtener el clima de {ciudad}. Error: {datos['message']}")
 
-        return descripcion, temperatura
+        return ciudad, temperatura, descripcion
 
 if __name__ == "__main__":
 

@@ -1,11 +1,10 @@
 import subprocess
 class Programas:
-    def __init__(self) -> None:
-        pass
-    def abrir(self):
+    def abrir(self, programa):
         subprocess.run([programa])
-        return programa
+        abriendo = f"abriendo {programa}"
+        return abriendo
 
 if __name__ == "__main__":
     programa = "gnome-terminal"
-    Programas.abrir(programa)
+    Programas().abrir(programa)
