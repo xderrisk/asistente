@@ -1,18 +1,26 @@
+## Asistente
 Asistente virtual que funciona con la voz y que obedece a comandos
 como decir la hora, dar información del clima, abrir páginas web,
-abrir aplicaciónes, dar respuesta a preguntas, reproducir música y más.
+abrir aplicaciónes, dar respuesta a preguntas, reproducir música.
 
-El asistente usa:
+### APIs:
+- Gemini
+- OpenWeatherMap
 
-PIP (python):
+### Bibliotecas PIP:
+- tkinter
 - google-generativeai
 - speechrecognition
 - gtts
 - sounddevice
 - wavio
 
-SISTEMA (linux):
+### Requerimientos en Linux:
 - mpg321
 
-SISTEMA (windows):
-- aún no ha sido probado en Windows
+Requerimientos en windows:
+- aún no ha sido probado
+
+## Como usarlo?
+
+En el script ```src/apis.py``` agrega tu api key de Gemini y OpenWeatherMap
