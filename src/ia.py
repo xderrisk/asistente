@@ -4,6 +4,7 @@ from tiempo import Tiempo
 from clima import Clima
 from abrirprogramas import Programas
 from web import abrir
+from musica import reproducir
 import platform
 
 class ChatIAGenerativa:
@@ -59,7 +60,8 @@ class ChatIAGenerativa:
             "hora": self.hora,
             "clima": self.clima,
             "abrir": self.abrir,
-            "web" : self.web
+            "web" : self.web,
+            "musica" : self.musica
         }
         return funtions
     
@@ -98,11 +100,20 @@ class ChatIAGenerativa:
     
     def web(self, open:str):
         model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-        response = model.generate_content(f"""¿Cual es el link oficial de: '{self.message}',
-                                          responde con el link exacto """)
+        response = model.generate_content(f"""Dame el link oficial de(ignora abre la pagina de): '{self.message}',
+                                          respondeme solo con el link exacto""")
         print(response.text)
         url = response.text.strip().lower()
         return abrir().web(url)
     
+    def musica(self, open:str):
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        response = model.generate_content(f"""Dada la siguiente instruccion que cancion quiero
+                                          reproducir: '{self.message}', respondeme solo con el
+                                          nombre de la canción""")
+        print(response.text)
+        cancion = response.text.strip().lower()
+        return reproducir().youtube_music(cancion)
+    
 if __name__ == "__main__":
-    response = ChatIAGenerativa().send_message("abre facebook")
+    response = ChatIAGenerativa().send_message("reproduce I gotta filen")
