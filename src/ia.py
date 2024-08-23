@@ -3,6 +3,7 @@ from apis import Gemini_API
 from tiempo import Tiempo
 from clima import Clima
 from abrirprogramas import Programas
+from web import abrir
 import platform
 
 class ChatIAGenerativa:
@@ -57,7 +58,8 @@ class ChatIAGenerativa:
         funtions = {
             "hora": self.hora,
             "clima": self.clima,
-            "abrir": self.abrir
+            "abrir": self.abrir,
+            "web" : self.web
         }
         return funtions
     
@@ -94,5 +96,13 @@ class ChatIAGenerativa:
         programa = response.text.strip().lower()
         return Programas().abrir(programa)
     
+    def web(self, open:str):
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        response = model.generate_content(f"""¿Cual es el link oficial de: '{self.message}',
+                                          responde con el link exacto """)
+        print(response.text)
+        url = response.text.strip().lower()
+        return abrir().web(url)
+    
 if __name__ == "__main__":
-    response = ChatIAGenerativa().send_message("que hora es")
+    response = ChatIAGenerativa().send_message("abre facebook")
