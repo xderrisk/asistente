@@ -9,26 +9,36 @@ def asistente():
     def proceso():
         # grabacion de voz
         texto = "Grabando..."
-        root.after(0, lambda: mensaje.config(text=texto))
+        root.after(0, lambda: mostrar_texto(texto, mensaje))
 
         # graba la voz y la convierte a texto
         texto = GrabadoraVoz().texto
 
         # Usar el método after para actualizar la interfaz en el hilo principal
-        root.after(0, lambda: mensaje.config(text=texto))
+        root.after(0, lambda: mostrar_texto(texto, mensaje))
 
-        if texto != "No se pudo entender el audio" and "No se pudo conectar con el servicio":
+        if texto != "No se pudo entender el audio" and texto != "No se pudo conectar con el servicio":
             # chat ia de google
             respuesta = ChatIAGenerativa().send_message(texto)
 
             # Actualizar la interfaz de usuario en el hilo principal
-            root.after(0, lambda: mensaje.config(text=respuesta))
+            root.after(0, lambda: mostrar_texto(respuesta, mensaje))
 
             # texto a voz
             voz = TextoAVoz(respuesta)
+        else:
+            voz = TextoAVoz(texto)
 
     # Ejecutar el proceso largo en un hilo separado
     threading.Thread(target=proceso, daemon=True).start()
+
+def mostrar_texto(texto, widget, velocidad=50):
+    widget.config(text="")  # Limpiar el texto anterior
+    def generador_de_texto(indice=0):
+        if indice < len(texto):
+            widget.config(text=widget.cget("text") + texto[indice])
+            widget.after(velocidad, generador_de_texto, indice+1)
+    generador_de_texto()
 
 # Crear la ventana principal
 root = tk.Tk()
@@ -50,7 +60,7 @@ etiqueta_imagen = tk.Button(root, image=imagen, relief='flat', command=asistente
 etiqueta_imagen.place(relx=0.02, rely=0.5, anchor=tk.W)
 
 # Crear una etiqueta para mostrar el mensaje
-mensaje = tk.Label(root, text="",  font=("Arial", 20), wraplength=300, fg='white', bg='#383838')
+mensaje = tk.Label(root, text="",  font=("Arial", 15), wraplength=300, fg='white', bg='#383838')
 mensaje.pack(side=tk.RIGHT, padx=10)
 
 # Ejecutar el bucle principal de Tkinter
