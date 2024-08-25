@@ -1,10 +1,13 @@
 import subprocess
 class Programas:
     def abrir(self, programa):
-        subprocess.run([programa])
-        abriendo = f"abriendo {programa}"
-        return abriendo
+        try:
+            subprocess.run([programa])
+            return f"abriendo {programa}"
+        except FileNotFoundError:
+            return f"El programa {programa} no se encontró."
 
 if __name__ == "__main__":
-    programa = "gnome-terminal"
-    Programas().abrir(programa)
+    programa = "firefox"
+    abrir = Programas().abrir(programa)
+    print(abrir)

@@ -16,6 +16,8 @@ abrir aplicaciónes, dar respuesta a preguntas, reproducir música.
 - wavio
 - playsound
 - pywhatkit
+- distro
+- pyinstaller
 
 ### Requerimientos en Linux:
 - python3-venv

@@ -6,6 +6,8 @@ from abrirprogramas import Programas
 from web import Abrir
 from musica import reproducir
 import platform
+import distro
+import os
 
 class ChatIAGenerativa:
     def __init__(self):
@@ -59,7 +61,7 @@ class ChatIAGenerativa:
         funtions = {
             "hora": self.hora,
             "clima": self.clima,
-            "abrir": self.abrir,
+            "abrir_programa": self.abrir_programa,
             "web" : self.web,
             "musica" : self.musica
         }
@@ -88,12 +90,16 @@ class ChatIAGenerativa:
         clima = response.text
         return clima
     
-    def abrir(self, open:str):
-        version = platform.version()
+    def abrir_programa(self, open:str):
+        sistema = platform.system()
+        if sistema == "Linux":
+            sabor = distro.name()
+        else:
+            sabor == platform.version()
         model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-        response = model.generate_content(f"""Dado el nombre de un programa como '{self.message}',
+        response = model.generate_content(f"""Dado el nombre de un programa como(ignora "abre"): '{self.message}',
                                           responde con el nombre exacto del comando que se usa
-                                          para abrir ese programa en la terminal de {version}
+                                          para abrir ese programa en la terminal de {sistema} {sabor}
                                           (el texto debe estar en minusculas)""")
         print(response.text)
         programa = response.text.strip().lower()
@@ -117,5 +123,5 @@ class ChatIAGenerativa:
         return reproducir().youtube_music(cancion)
     
 if __name__ == "__main__":
-    respuesta = ChatIAGenerativa().send_message("abre la pagina de taringa")
+    respuesta = ChatIAGenerativa().send_message("abre la terminal")
     print(respuesta)
