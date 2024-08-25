@@ -52,9 +52,18 @@ Weather_API = ""
 ```
 
 ## Como funciona?
-1. El programa inicia en la carpeta ```src``` con el script [interfaz.py](src/interfaz.py) donde se muestra un boton de microfono y un label para mostrar los resultados del asistente
-2. Al tocar el microfono se inicia [grabadora.py](src/grabadora.py) que guarda la grabacion en la carpeta ```media```
-3. Cuando termina la grabacion se inicia [aat.py](src/aat.py) que convierte el audio grabado a texto
-4. Si se reconoce lo que dice el audio grabado se lleva el texto a [ia.py](src/ia.py)
-5. Según lo solicitado gracias a las funciones de Gemini podra [decir la hora y fecha actual](src/tiempo.py), [decir el clima](src/clima.py), [abrir programas](src/abrirprogramas.py), [abrir paginas web](src/web.py), [reproducir música](src/musica.py) o simplemente responder a la pregunta
-6. Finalmente [voz.py](src/voz.py) se encarga de convertir la respuesta del asistente en voz
+1. El programa inicia en la carpeta ```src``` con el script [main.py](src/main.py) donde se muestra un boton de microfono y un label para mostrar los resultados del asistente
+
+2. Al tocar el microfono se inicia [grabadora.py](src/grabadora.py) que guarda la grabacion en la carpeta ```media``` y lo convierte a texto
+
+3. Si se reconoce lo que dice el audio grabado se lleva el texto a [ia.py](src/ia.py) que usa la api de Gemini ubicada en ```src/apis.py```
+
+4. Según lo solicitado gracias a las funciones de Gemini podra [decir la hora y fecha actual](src/tiempo.py), [decir el clima](src/clima.py), [abrir programas](src/programas.py), [abrir paginas web](src/web.py), [reproducir música](src/musica.py) o simplemente responder a preguntas
+
+5. Finalmente [voz.py](src/voz.py) se encarga de convertir la respuesta del asistente en voz
+
+## Como creo el ejecutable?
+Ejecuta este comando en tu entorno virtual Python
+```bash
+pyinstaller --onefile --windowed --icon=media/bot.png --name=asistente --add-data=media/bot.png:media --add-data=media/microfono.png:media src/main.py
+```
