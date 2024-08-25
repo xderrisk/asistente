@@ -52,7 +52,7 @@ class ChatIAGenerativa:
             model = genai.GenerativeModel(model_name="gemini-1.5-flash")
             response = model.generate_content(self.instrucciones+self.message)
             response = response.text
-        print("\n"+response)
+        response = response.replace("*", "").replace("\n", "")
         return response
 
     def funciones(self):
@@ -69,7 +69,8 @@ class ChatIAGenerativa:
         tiempo = Tiempo().hora_fecha()
         model = genai.GenerativeModel(model_name="gemini-1.5-flash")
         response = model.generate_content(f"""Dado la siguiente información sobre el tiempo actual: {tiempo}
-                                          - respondeme {self.message}""")
+                                          - respondeme {self.message}(no me des informacion extra,
+                                          si te pido la fecha escribelo en letras)""")
         print(response)
         tiempo = response.text
         return tiempo
@@ -116,4 +117,5 @@ class ChatIAGenerativa:
         return reproducir().youtube_music(cancion)
     
 if __name__ == "__main__":
-    response = ChatIAGenerativa().send_message("reproduce I gotta filen")
+    respuesta = ChatIAGenerativa().send_message("abre la pagina de facebook")
+    print(respuesta)
