@@ -1,3 +1,4 @@
+from playsound import playsound
 from gtts import gTTS
 import platform
 import os
@@ -15,15 +16,10 @@ class TextoAVoz:
 
         if sistema == "Windows":
             # Reproducir el archivo de audio en Windows
-            os.system(f"start {ruta_voz}")
-        elif sistema == "Darwin":
-            # Reproducir el archivo de audio en MacOS
-            os.system(f"afplay {ruta_voz}")
+            playsound(ruta_voz)
         elif sistema == "Linux":
             # Reproducir el archivo de audio en Linux
             os.system(f"mpg321 {ruta_voz}")
-            # o usa ffplay si no tienes mpg321
-            # os.system("ffplay -nodisp -autoexit ejemplo.mp3")
         else:
             print("Sistema operativo no soportado.")
 
