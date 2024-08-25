@@ -24,6 +24,8 @@ class GrabadoraVoz:
         print("Grabación guardada en", self.nombre_archivo)
         self.texto = self.convertir()
 
+        os.remove(self.nombre_archivo)
+
     def iniciar_grabacion(self):
         self.frames = []
         self.grabando = True

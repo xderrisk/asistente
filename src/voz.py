@@ -13,14 +13,14 @@ class TextoAVoz:
 
         sistema = platform.system()
 
-        if sistema == "Windows":
-            # Reproducir el archivo de audio en Windows
-            playsound(ruta_voz)
-        elif sistema == "Linux":
+        if sistema == "Linux":
             # Reproducir el archivo de audio en Linux
             os.system(f"mpg321 {ruta_voz}")
         else:
-            print("Sistema operativo no soportado.")
+            # Reproducir el archivo de audio en Windows
+            playsound(ruta_voz)
+            
+        os.remove(ruta_voz)
 
 if __name__ == "__main__":
     texto = "Prueba"
