@@ -1,3 +1,5 @@
+from rutas import ruta
+import speech_recognition as sr
 import sounddevice as sd
 import numpy as np
 import wavio
@@ -9,9 +11,7 @@ class GrabadoraVoz:
     def __init__(self):
         self.frecuencia_muestreo = 44100
         self.canales = 2
-        directorio_madre = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        ruta_media = os.path.join(directorio_madre, 'media')
-        self.nombre_archivo = os.path.join(ruta_media, 'grabacion.wav')
+        self.nombre_archivo = ruta('media/grabacion.wav')
         self.frames = []
         self.grabando = False
         self.ultimo_sonido = time.time()
@@ -22,6 +22,7 @@ class GrabadoraVoz:
 
         self.detener_grabacion()
         print("Grabación guardada en", self.nombre_archivo)
+        self.texto = self.convertir()
 
     def iniciar_grabacion(self):
         self.frames = []
@@ -63,5 +64,23 @@ class GrabadoraVoz:
             else:
                 print("No se grabó ningún sonido.")
 
+    def convertir(self):
+        self.audio_file = ruta('media/grabacion.wav')
+        self.recognizer = sr.Recognizer()
+        with sr.AudioFile(self.audio_file) as source:
+            audio = self.recognizer.record(source)
+
+        try:
+            text = self.recognizer.recognize_google(audio, language="es-ES")
+            print(text)
+            return text
+        except sr.UnknownValueError:
+            text = "No se pudo entender el audio"
+            return text
+        except sr.RequestError as e:
+            text = "No se pudo conectar con el servicio"
+            return text
+
 if __name__ == "__main__":
-    GrabadoraVoz()
+    grabacion = GrabadoraVoz()
+    print(grabacion.texto)

@@ -1,20 +1,18 @@
 from grabadora import GrabadoraVoz
-from aat import AudioATexto
 from ia import ChatIAGenerativa
 from voz import TextoAVoz
+from rutas import ruta
 import tkinter as tk
 import threading
-import os
 
 def asistente():
     def proceso():
         # grabacion de voz
         texto = "Grabando..."
         root.after(0, lambda: mensaje.config(text=texto))
-        grabadora = GrabadoraVoz()
 
-        # voz a texto
-        texto = AudioATexto().convertir()
+        # graba la voz y la convierte a texto
+        texto = GrabadoraVoz().texto
 
         # Usar el método after para actualizar la interfaz en el hilo principal
         root.after(0, lambda: mensaje.config(text=texto))
@@ -35,16 +33,15 @@ def asistente():
 # Crear la ventana principal
 root = tk.Tk()
 root.title("Asistente")
-icono = tk.PhotoImage(file='media/bot.png')
+ruta_imagen = ruta('media/bot.png')
+icono = tk.PhotoImage(file=ruta_imagen)
 root.iconphoto(False, icono)
 root.geometry("500x150")
 root.configure(bg='#383838')
 root.resizable(False, False)
 
 # Cargar la imagen en formato
-directorio_madre = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ruta_media = os.path.join(directorio_madre, 'media')
-ruta_imagen = os.path.join(ruta_media, 'microfono.png')
+ruta_imagen = ruta('media/microfono.png')
 imagen = tk.PhotoImage(file=ruta_imagen)
 imagen = imagen.subsample(7, 7)
 

@@ -1,4 +1,5 @@
 from playsound import playsound
+from rutas import ruta
 from gtts import gTTS
 import platform
 import os
@@ -7,9 +8,7 @@ class TextoAVoz:
     def __init__(self, texto):
         texto = texto
         tts = gTTS(text=texto, lang='es')
-        directorio_madre = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        ruta_media = os.path.join(directorio_madre, 'media')
-        ruta_voz = os.path.join(ruta_media, 'voz.mp3')
+        ruta_voz = ruta('media/grabacion.wav')
         tts.save(ruta_voz)
 
         sistema = platform.system()
