@@ -3,7 +3,7 @@ from apis import Gemini_API
 from tiempo import Tiempo
 from clima import Clima
 from abrirprogramas import Programas
-from web import abrir
+from web import Abrir
 from musica import reproducir
 import platform
 
@@ -101,11 +101,11 @@ class ChatIAGenerativa:
     
     def web(self, open:str):
         model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-        response = model.generate_content(f"""Dame el link oficial de(ignora abre la pagina de): '{self.message}',
-                                          respondeme solo con el link exacto""")
+        response = model.generate_content(f"""Dame el link oficial de(ignora "abre la pagina de"): '{self.message}',
+                                          respondeme solo con el link exacto, si no existe avisame""")
         print(response.text)
         url = response.text.strip().lower()
-        return abrir().web(url)
+        return Abrir().web(url)
     
     def musica(self, open:str):
         model = genai.GenerativeModel(model_name="gemini-1.5-flash")
@@ -117,5 +117,5 @@ class ChatIAGenerativa:
         return reproducir().youtube_music(cancion)
     
 if __name__ == "__main__":
-    respuesta = ChatIAGenerativa().send_message("abre la pagina de facebook")
+    respuesta = ChatIAGenerativa().send_message("abre la pagina de taringa")
     print(respuesta)
