@@ -2,12 +2,11 @@ import google.generativeai as genai
 from apis import Gemini_API
 from tiempo import Tiempo
 from clima import Clima
-from abrirprogramas import Programas
+from programas import Programas
 from web import Abrir
 from musica import reproducir
 import platform
 import distro
-import os
 
 class ChatIAGenerativa:
     def __init__(self):
