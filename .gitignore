@@ -3,6 +3,6 @@
 /src/apis.py
 /media/grabacion.wav
 /media/voz.mp3
-/main.spec
+*.spec
 /build
 /dist
