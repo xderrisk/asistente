@@ -14,19 +14,23 @@ abrir aplicaciónes, dar respuesta a preguntas, reproducir música.
 - gtts
 - sounddevice
 - wavio
+- playsound
+- pywhatkit
 
 ### Requerimientos en Linux:
+- python3-venv
+- python3-tk
 - mpg321
 
-### Requerimientos en windows:
-- Sin requerimientos
+### Requerimientos en Windows:
+- Instalar Python
 
 ## Como usarlo?
-Crea un entorno virtual python en la carpeta raiz del proyecto
+Crea un entorno virtual Python en la carpeta raiz del proyecto
 ```bash
 python3 -m venv .venv
 ```
-activa el entorno virtual python
+Activa el entorno virtual Python
 ```bash
 # en Linux
 source .venv/bin/activate
