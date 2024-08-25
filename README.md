@@ -18,10 +18,27 @@ abrir aplicaciónes, dar respuesta a preguntas, reproducir música.
 ### Requerimientos en Linux:
 - mpg321
 
-Requerimientos en windows:
-- aún no ha sido probado
+### Requerimientos en windows:
+- Sin requerimientos
 
 ## Como usarlo?
+Crea un entorno virtual python en la carpeta raiz del proyecto
+```bash
+python3 -m venv .venv
+```
+activa el entorno virtual python
+```bash
+# en Linux
+source .venv/bin/activate
+```
+```bash
+# en Windows
+.venv\Scripts\activate.bat
+```
+Instala los requerimientos pip
+```bash
+pip install -r requirements.txt
+```
 Crea un script llamado ```apis.py``` en la carpeta ```src``` y agrega tu api key de Gemini y OpenWeatherMap
 ```python
 Gemini_API = ""
