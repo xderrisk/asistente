@@ -1,7 +1,7 @@
 ## Asistente
 Asistente virtual que funciona con la voz y que obedece a comandos
 como decir la hora, dar información del clima, abrir páginas web,
-abrir aplicaciónes, dar respuesta a preguntas, reproducir música.
+abrir aplicaciones, dar respuesta a preguntas, reproducir música.
 
 ### APIs:
 - Gemini
@@ -28,7 +28,7 @@ abrir aplicaciónes, dar respuesta a preguntas, reproducir música.
 - Instalar Python
 
 ## Como usarlo?
-Crea un entorno virtual Python en la carpeta raiz del proyecto
+Crea un entorno virtual Python en la carpeta raíz del proyecto
 ```bash
 python3 -m venv .venv
 ```
@@ -52,13 +52,13 @@ Weather_API = ""
 ```
 
 ## Como funciona?
-1. El programa inicia en la carpeta ```src``` con el script [main.py](src/main.py) donde se muestra un boton de microfono y un label para mostrar los resultados del asistente
+1. El programa inicia en la carpeta ```src``` con el script [main.py](src/main.py) donde se muestra un botón de micrófono y un label para mostrar los resultados del asistente
 
-2. Al tocar el microfono se inicia [grabadora.py](src/grabadora.py) que guarda la grabacion en la carpeta ```media``` y lo convierte a texto
+2. Al tocar el micrófono se inicia [grabadora.py](src/grabadora.py) que guarda la grabación en la carpeta ```media``` y lo convierte a texto
 
 3. Si se reconoce lo que dice el audio grabado se lleva el texto a [ia.py](src/ia.py) que usa la api de Gemini ubicada en ```src/apis.py```
 
-4. Según lo solicitado gracias a las funciones de Gemini podra [decir la hora y fecha actual](src/tiempo.py), [decir el clima](src/clima.py), [abrir programas](src/programas.py), [abrir paginas web](src/web.py), [reproducir música](src/musica.py) o simplemente responder a preguntas
+4. Según lo solicitado gracias a las funciones de Gemini podrá [decir la hora y fecha actual](src/tiempo.py), [decir el clima](src/clima.py), [abrir programas](src/programas.py), [abrir paginas web](src/web.py), [reproducir música](src/musica.py) o simplemente responder a preguntas
 
 5. Finalmente [voz.py](src/voz.py) se encarga de convertir la respuesta del asistente en voz
 
