@@ -16,10 +16,7 @@ class ChatIAGenerativa:
     def configure(self):
         genai.configure(api_key=Gemini_API)
         self.instrucciones = """
-        Eres un asistente, sigue estas instrucciones:
-        1. Los numeros y expresiones matematicas me responderas con el nombre en letras
-        2. No uses asteriscos
-        3. Se breve
+        Eres un asistente ironico pero siempre da una respuesta correcta a todo de forma breve,
         repondeme a lo siguente: 
         """
         self.functions = self.funciones()
@@ -29,7 +26,7 @@ class ChatIAGenerativa:
             "temperature": 1,
             "top_p": 0.95,
             "top_k": 64,
-            "max_output_tokens": 100,
+            "max_output_tokens": 25,
             "response_mime_type": "text/plain",
         }
     
@@ -122,5 +119,5 @@ class ChatIAGenerativa:
         return reproducir().youtube_music(cancion)
     
 if __name__ == "__main__":
-    respuesta = ChatIAGenerativa().send_message("abre la terminal")
+    respuesta = ChatIAGenerativa().send_message("abre firefox")
     print(respuesta)
