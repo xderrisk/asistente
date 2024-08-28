@@ -56,8 +56,10 @@ imagen = tk.PhotoImage(file=ruta_imagen)
 imagen = imagen.subsample(7, 7)
 
 # Crear un widget de etiqueta para mostrar la imagen
-etiqueta_imagen = tk.Button(root, image=imagen, relief='flat', command=asistente, bg='#383838')
-etiqueta_imagen.place(relx=0.02, rely=0.5, anchor=tk.W)
+microfono = tk.Button(root, image=imagen, relief='flat', command=asistente, bg='#383838')
+microfono.place(relx=0.02, rely=0.5, anchor=tk.W)
+
+root.bind("<space>", lambda event: microfono.invoke())
 
 # Crear una etiqueta para mostrar el mensaje
 mensaje = tk.Label(root, text="",  font=("Arial", 15), wraplength=300, fg='white', bg='#383838')
