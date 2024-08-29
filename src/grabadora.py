@@ -1,9 +1,11 @@
 from rutas import ruta
+from playsound import playsound
 import speech_recognition as sr
 import sounddevice as sd
 import numpy as np
-import wavio
 import threading
+import wavio
+import platform
 import time
 import os
 
@@ -26,12 +28,33 @@ class GrabadoraVoz:
 
         os.remove(self.nombre_archivo)
 
+        terminar = ruta('media/acabar-grabacion.mp3')
+        sistema = platform.system()
+
+        if sistema == "Linux":
+            # Reproducir el archivo de audio en Linux
+            os.system(f"mpg321 {terminar}")
+        else:
+            # Reproducir el archivo de audio en Windows
+            playsound(terminar)
+
     def iniciar_grabacion(self):
         self.frames = []
         self.grabando = True
         self.ultimo_sonido = time.time()
         self.hilo_grabacion = threading.Thread(target=self.grabar)
         self.hilo_grabacion.start()
+
+        empezar = ruta('media/iniciar-grabacion.mp3')
+        sistema = platform.system()
+
+        if sistema == "Linux":
+            # Reproducir el archivo de audio en Linux
+            os.system(f"mpg321 {empezar}")
+        else:
+            # Reproducir el archivo de audio en Windows
+            playsound(empezar)
+
         print("Grabando...")
 
     def grabar(self):
