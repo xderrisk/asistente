@@ -65,6 +65,5 @@ Weather_API = ""
 ## Como creo el ejecutable?
 Ejecuta este comando en tu entorno virtual Python
 ```bash
-pyinstaller --onefile --windowed --icon=media/bot.png --name=asistente --add-data=media/bot.png:media --add-data=media/microfono.png:media --add-data=media/iniciar-grabacion.mp
-3:media --add-data=media/acabar-grabacion.mp3:media src/main.py
+pyinstaller --onefile --windowed --icon=media/bot.png --name=asistente --add-data=media/bot.png:media --add-data=media/microfono.png:media --add-data=media/iniciar-grabacion.mp3:media --add-data=media/acabar-grabacion.mp3:media src/main.py
 ```
