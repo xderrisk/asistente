@@ -95,16 +95,12 @@ class ChatIAGenerativa:
             print(f"Error al obtener la hora: {e}")
             return "Hubo un problema al obtener la hora."
 
-    def clima(self, ciudad:str, temperatura:str, descripcion:str):
+    def clima(self, descripcion:str):
         clima = Clima().obtener_clima()
         try:
             model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-            response = model.generate_content(f"""Dado la siguiente información sobre el clima:
-                                              - lugar: {clima[0]}
-                                              - temperatura: {clima[1]}°
-                                              - descripción: {clima[2]}
-                                              Dime el clima segun la info que te he ofrecido
-                                              (dime el lugar, la temperatura y la descripción)""")
+            response = model.generate_content(f"""Dado la siguiente información sobre el clima: {clima}
+                                              comentame de forma resumida como esta el clima""")
             print(response)
             clima = response.text
             return clima
@@ -157,5 +153,5 @@ class ChatIAGenerativa:
             return "Hubo un problema al reproducir la música."
 
 if __name__ == "__main__":
-    respuesta = ChatIAGenerativa().send_message("reproduce rasputin")
+    respuesta = ChatIAGenerativa().send_message("clima de hoy")
     print(respuesta)

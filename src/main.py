@@ -71,7 +71,7 @@ class AsistenteApp:
         self.mostrar_frame(self.bienvenida_frame)
 
     def verificar_entrada(self, *args):
-        if self.text_gemini.get().strip():
+        if self.text_gemini.get().strip() or self.text_ubicacion.get().strip():
             self.button.config(state=tk.NORMAL)
         else:
             self.button.config(state=tk.DISABLED)
@@ -140,29 +140,45 @@ class AsistenteApp:
             self.config_frame = tk.Frame(self.root, bg='#383838')
             
             label_gemini = tk.Label(self.config_frame, text="Ingrese su API de Gemini:")
-            label_gemini.pack(pady=5)
+            label_gemini.pack(pady=3)
 
             self.text_gemini = tk.Entry(self.config_frame, width=50)
-            self.text_gemini.pack(pady=5)
+            self.text_gemini.pack(pady=3)
+
+            label_ubicacion = tk.Label(self.config_frame, text="Ingrese su ubicación:")
+            label_ubicacion.pack(pady=3)
+
+            self.text_ubicacion = tk.Entry(self.config_frame, width=50)
+            self.text_ubicacion.pack(pady=3)
 
             self.button = tk.Button(self.config_frame, text="Guardar", command=self.guardar_configuracion, bg='#565656', fg='white', state=tk.DISABLED)
-            self.button.pack(pady=10)
+            self.button.pack(pady=3)
 
             self.text_gemini.bind("<KeyRelease>", self.verificar_entrada)
+            self.text_ubicacion.bind("<KeyRelease>", self.verificar_entrada)
 
         self.mostrar_frame(self.config_frame)
 
         if not self.text_gemini.get().strip():
-            gemini_api_key = self.config.get('API', 'geminiapikey', fallback='')
-            if gemini_api_key:
-                self.text_gemini.insert(tk.END, gemini_api_key)
+            gem = self.config.get('API', 'geminiapikey', fallback='')
+            if gem:
+                self.text_gemini.insert(tk.END, gem)
+
+        if not self.text_ubicacion.get().strip():
+            ubi = self.config.get('DATA', 'ubicacion', fallback='')
+            if ubi:
+                self.text_ubicacion.insert(tk.END, ubi)
 
     def guardar_configuracion(self):
-        nuevo_gemini_api_key = self.text_gemini.get().strip()
+        nuevo_gemini = self.text_gemini.get().strip()
+        nueva_ubicacion = self.text_ubicacion.get().strip()
 
         if 'API' not in self.config:
             self.config.add_section('API')
-        self.config.set('API', 'geminiapikey', nuevo_gemini_api_key)
+        self.config.set('API', 'geminiapikey', nuevo_gemini)
+        if 'DATA' not in self.config:
+            self.config.add_section('DATA')
+        self.config.set('DATA', 'ubicacion', nueva_ubicacion)
 
         with open(ruta('config.ini'), 'w') as configfile:
             self.config.write(configfile)

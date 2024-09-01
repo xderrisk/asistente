@@ -1,37 +1,39 @@
-from rutas import ruta
-import configparser
 import requests
+import configparser
+from bs4 import BeautifulSoup
+from rutas import ruta
+
 class Clima:
     def __init__(self):
-        self.obtener_clima
-
+        self.config = configparser.ConfigParser()
+        self.config.read(ruta('config.ini'))
+        self.ubicacion = self.config.get('DATA', 'ubicacion', fallback='')
+        self.url = f"https://www.google.com/search?q=clima+{self.ubicacion}"
+        self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
+        self.obtener_clima()
+    
     def obtener_clima(self):
-        config = configparser.ConfigParser()
-        config.read(ruta('config.ini'))
-        Weather_API = config.get('API', 'weatherapikey')
-        clave_api = Weather_API
-        ciudad = 'Jipijapa'
-        pais = "EC"
-        url = f"http://api.openweathermap.org/data/2.5/weather?q={ciudad},{pais}&appid={clave_api}&lang=es&units=metric"
-        respuesta = requests.get(url)
-        datos = respuesta.json()
-        print(datos)
-        if respuesta.status_code == 200:
-            descripcion = datos['weather'][0]['description']
-            temperatura = datos['main']['temp']
-            humedad = datos['main']['humidity']
-            viento = datos['wind']['speed']
-
-            print(f"Clima en {ciudad}:")
-            print(f"Descripción: {descripcion}")
-            print(f"Temperatura: {temperatura}°C")
-            print(f"Humedad: {humedad}%")
-            print(f"Velocidad del viento: {viento} m/s")
+        # Hacer una solicitud a la URL
+        response = requests.get(self.url, headers=self.headers)
+        
+        if response.status_code == 200:
+            # Analizar el contenido HTML
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Buscar el elemento que contiene la temperatura
+            temp_elem = soup.find('span', {'class': 'wob_t', 'id': 'wob_tm'})
+            # Buscar el elemento que contiene la descripción del clima
+            desc_elem = soup.find('span', {'id': 'wob_dc'})
+            
+            if temp_elem and desc_elem:
+                temperatura = temp_elem.text
+                descripcion = desc_elem.text
+                return f"El clima en {self.ubicacion} es {descripcion} con una temperatura de {temperatura}°C."
+            else:
+                return "No se pudo obtener la información del clima."
         else:
-            print(f"No se pudo obtener el clima de {ciudad}. Error: {datos['message']}")
-
-        return ciudad, temperatura, descripcion
+            return "Error al hacer la solicitud."
 
 if __name__ == "__main__":
-
-    Clima().obtener_clima()
+    clima = Clima().obtener_clima()
+    print(clima)
