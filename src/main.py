@@ -1,131 +1,175 @@
+import tkinter as tk
+import configparser
+import threading
 from grabadora import GrabadoraVoz
 from ia import ChatIAGenerativa
 from voz import TextoAVoz
 from rutas import ruta
-import tkinter as tk
-import configparser
-import threading
 
-def asistente():
-    def proceso():
+class AsistenteApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Asistente")
+        self.root.geometry("500x150")
+        self.root.configure(bg='#383838')
+        self.root.resizable(False, False)
+
+        self.bienvenida_frame = None
+        self.main_frame = None
+        self.config_frame = None
+
+        self.config = configparser.ConfigParser()
+        self.config.read(ruta('config.ini'))
+
+        ruta_imagen = ruta('media/bot.png')
+        icono = tk.PhotoImage(file=ruta_imagen)
+        self.root.iconphoto(False, icono)
+
+        self.crear_menu()
+
+        # Determinar la pantalla inicial
+        if 'API' not in self.config:
+            self.abrir_bienvenida()
+        else:
+            self.abrir_inicio()
+
+        # Bind para la tecla espacio
+        self.root.bind("<space>", self.manejar_espacio)
+
+    def crear_menu(self):
+        menubar = tk.Menu(self.root, bg='#565656', fg='white', activebackground='#4E4E4E', activeforeground='white')
+        menubar.add_command(label="Inicio", command=self.abrir_inicio)
+        menubar.add_command(label="Opciones", command=self.abrir_configuracion)
+        self.root.config(menu=menubar)
+
+    def mostrar_frame(self, frame_a_mostrar):
+        for frame in [self.bienvenida_frame, self.main_frame, self.config_frame]:
+            if frame:
+                frame.pack_forget()
+        frame_a_mostrar.pack(fill=tk.BOTH, expand=True)
+
+    def abrir_bienvenida(self):
+        if not self.bienvenida_frame:
+            self.bienvenida_frame = tk.Frame(self.root, bg='#383838')
+
+            self.label = tk.Label(self.bienvenida_frame, text="¡Bienvenido!", font=("Helvetica", 16), fg='white', bg='#383838')
+            self.label.pack(pady=5)
+
+            self.label = tk.Label(self.bienvenida_frame, text="Ingresa tu API de Gemini", font=("Helvetica", 16), fg='white', bg='#383838')
+            self.label.pack(pady=5)
+
+            self.text_gemini = tk.Entry(self.bienvenida_frame, width=50)
+            self.text_gemini.pack(pady=5)
+            
+            self.button = tk.Button(self.bienvenida_frame, text="Guardar", command=self.finalizar_bienvenida, bg='#565656', fg='white', state=tk.DISABLED)
+            self.button.pack(pady=10)
+
+            self.text_gemini.bind("<KeyRelease>", self.verificar_entrada)
+
+            self.bienvenida_frame.pack(fill=tk.BOTH, expand=True)
+
+        self.mostrar_frame(self.bienvenida_frame)
+
+    def verificar_entrada(self, *args):
+        if self.text_gemini.get().strip():
+            self.button.config(state=tk.NORMAL)
+        else:
+            self.button.config(state=tk.DISABLED)
+
+    def finalizar_bienvenida(self):
+        self.guardar_configuracion()
+        self.abrir_inicio()
+
+    def abrir_inicio(self):
+        if not self.main_frame:
+            self.main_frame = tk.Frame(self.root, bg='#383838')
+
+            ruta_imagen = ruta('media/microfono.png')
+            imagen = tk.PhotoImage(file=ruta_imagen)
+            imagen = imagen.subsample(7, 7)
+
+            self.microfono = tk.Button(self.main_frame, image=imagen, relief='flat', command=self.asistente, bg='#383838')
+            self.microfono.image = imagen  # Necesario para evitar que la imagen sea recolectada por el GC
+            self.microfono.place(relx=0.02, rely=0.5, anchor=tk.W)
+
+            self.mensaje = tk.Label(self.main_frame, text="", font=("Arial", 15), wraplength=300, fg='white', bg='#383838')
+            self.mensaje.pack(side=tk.RIGHT, padx=10)
+
+        self.mostrar_frame(self.main_frame)
+
+    def manejar_espacio(self, event):
+        if self.main_frame and self.main_frame.winfo_ismapped():
+            self.microfono.invoke()
+
+    def asistente(self):
+        threading.Thread(target=self.proceso, daemon=True).start()
+
+    def proceso(self):
         # grabacion de voz
         texto = "Grabando..."
-        root.after(0, lambda: mostrar_texto(texto, mensaje))
+        self.root.after(0, lambda: self.mostrar_texto(texto, self.mensaje))
 
         # graba la voz y la convierte a texto
         texto = GrabadoraVoz().texto
 
-        # Usar el método after para actualizar la interfaz en el hilo principal
-        root.after(0, lambda: mostrar_texto(texto, mensaje))
+        self.root.after(0, lambda: self.mostrar_texto(texto, self.mensaje))
 
-        if texto != "No se pudo entender el audio" and texto != "No se pudo conectar con el servicio":
+        if texto not in ["No se pudo entender el audio", "No se pudo conectar con el servicio"]:
             # chat ia de google
             respuesta = ChatIAGenerativa().send_message(texto)
 
-            # Actualizar la interfaz de usuario en el hilo principal
-            root.after(0, lambda: mostrar_texto(respuesta, mensaje))
+            self.root.after(0, lambda: self.mostrar_texto(respuesta, self.mensaje))
 
             # texto a voz
-            voz = TextoAVoz(respuesta)
+            TextoAVoz(respuesta)
         else:
-            voz = TextoAVoz(texto)
+            TextoAVoz(texto)
 
-    # Ejecutar el proceso largo en un hilo separado
-    threading.Thread(target=proceso, daemon=True).start()
+    def mostrar_texto(self, texto, widget, velocidad=50):
+        widget.config(text="")  # Limpiar el texto anterior
 
-def mostrar_texto(texto, widget, velocidad=50):
-    widget.config(text="")  # Limpiar el texto anterior
-    def generador_de_texto(indice=0):
-        if indice < len(texto):
-            widget.config(text=widget.cget("text") + texto[indice])
-            widget.after(velocidad, generador_de_texto, indice+1)
-    generador_de_texto()
+        def generador_de_texto(indice=0):
+            if indice < len(texto):
+                widget.config(text=widget.cget("text") + texto[indice])
+                widget.after(velocidad, generador_de_texto, indice + 1)
 
-def mostrar_frame(frame_a_mostrar):
-    # Oculta todos los frames
-    for frame in [main_frame, config_frame]:
-        frame.pack_forget()
-    
-    # Muestra el frame seleccionado
-    frame_a_mostrar.pack(fill=tk.BOTH, expand=True)
+        generador_de_texto()
 
-def abrir_inicio():
-    mostrar_frame(main_frame)
+    def abrir_configuracion(self):
+        if not self.config_frame:
+            self.config_frame = tk.Frame(self.root, bg='#383838')
+            
+            label_gemini = tk.Label(self.config_frame, text="Ingrese su API de Gemini:")
+            label_gemini.pack(pady=5)
 
-def manejar_espacio(event):
-    if main_frame.winfo_ismapped():
-        microfono.invoke()
+            self.text_gemini = tk.Entry(self.config_frame, width=50)
+            self.text_gemini.pack(pady=5)
 
-def abrir_configuracion():
-    mostrar_frame(config_frame)
-    if not text_gemini.get().strip():
-        config = configparser.ConfigParser()
-        config.read(ruta('config.ini'))
-        gemini_api_key = config.get('API', 'geminiapikey', fallback='')
-        if gemini_api_key:
-            text_gemini.insert(tk.END, gemini_api_key)
+            self.button = tk.Button(self.config_frame, text="Guardar", command=self.guardar_configuracion, bg='#565656', fg='white', state=tk.DISABLED)
+            self.button.pack(pady=10)
 
-def guardar_configuracion():
+            self.text_gemini.bind("<KeyRelease>", self.verificar_entrada)
 
-    nuevo_gemini_api_key = text_gemini.get().strip()  # Obtener todo el texto y eliminar espacios en blanco
+        self.mostrar_frame(self.config_frame)
 
-    # Leer el archivo de configuración actual
-    config = configparser.ConfigParser()
-    config.read(ruta('config.ini'))
-    
-    # Actualizar la clave geminiapikey con el nuevo valor
-    if 'API' not in config:
-        config.add_section('API')
-    config.set('API', 'geminiapikey', nuevo_gemini_api_key)
-    
-    # Guardar los cambios en el archivo de configuración
-    with open(ruta('config.ini'), 'w') as configfile:
-        config.write(configfile)
+        if not self.text_gemini.get().strip():
+            gemini_api_key = self.config.get('API', 'geminiapikey', fallback='')
+            if gemini_api_key:
+                self.text_gemini.insert(tk.END, gemini_api_key)
 
-# Crear la ventana principal
-root = tk.Tk()
-root.title("Asistente")
-ruta_imagen = ruta('media/bot.png')
-icono = tk.PhotoImage(file=ruta_imagen)
-root.iconphoto(False, icono)
-root.geometry("500x150")
-root.configure(bg='#383838')
-root.resizable(False, False)
+    def guardar_configuracion(self):
+        nuevo_gemini_api_key = self.text_gemini.get().strip()
 
-# Crear el menú principal
-menubar = tk.Menu(root, bg='#565656', fg='white', activebackground='#4E4E4E', activeforeground='white')
-config_menu = tk.Menu(menubar, tearoff=0)
-menubar.add_command(label="Inicio", command=abrir_inicio)
-menubar.add_command(label="Opciones", command=abrir_configuracion)
-root.config(menu=menubar)
+        if 'API' not in self.config:
+            self.config.add_section('API')
+        self.config.set('API', 'geminiapikey', nuevo_gemini_api_key)
 
-# pantalla de inicio
-main_frame = tk.Frame(root, bg='#383838')
-ruta_imagen = ruta('media/microfono.png')
-imagen = tk.PhotoImage(file=ruta_imagen)
-imagen = imagen.subsample(7, 7)
+        with open(ruta('config.ini'), 'w') as configfile:
+            self.config.write(configfile)
 
-# Crear un widget de etiqueta para mostrar la imagen
-microfono = tk.Button(main_frame, image=imagen, relief='flat', command=asistente, bg='#383838')
-microfono.place(relx=0.02, rely=0.5, anchor=tk.W)
-root.bind("<space>", lambda event: microfono.invoke())
+        self.button.config(state=tk.DISABLED)
 
-# Crear una etiqueta para mostrar el mensaje
-mensaje = tk.Label(main_frame, text="",  font=("Arial", 15), wraplength=300, fg='white', bg='#383838')
-mensaje.pack(side=tk.RIGHT, padx=10)
-
-
-# pantalla de configuracion
-config_frame = tk.Frame(root, bg='#383838')
-label_gemini = tk.Label(config_frame, text="Ingrese su API de Gemini:")
-label_gemini.pack(pady=5)
-text_gemini = tk.Entry(config_frame, width=40)
-text_gemini.pack(pady=5)
-guardar_btn = tk.Button(config_frame, text="Guardar", command=guardar_configuracion, bg='#565656', fg='white')
-guardar_btn.pack(pady=10)
-
-mostrar_frame(main_frame)
-
-root.bind("<space>", manejar_espacio)
-
-root.mainloop()
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = AsistenteApp(root)
+    root.mainloop()
