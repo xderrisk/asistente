@@ -3,6 +3,7 @@ from ia import ChatIAGenerativa
 from voz import TextoAVoz
 from rutas import ruta
 import tkinter as tk
+import configparser
 import threading
 
 def asistente():
@@ -40,6 +41,41 @@ def mostrar_texto(texto, widget, velocidad=50):
             widget.after(velocidad, generador_de_texto, indice+1)
     generador_de_texto()
 
+def mostrar_frame(frame_a_mostrar):
+    # Oculta todos los frames
+    for frame in [main_frame, config_frame]:
+        frame.pack_forget()
+    
+    # Muestra el frame seleccionado
+    frame_a_mostrar.pack(fill=tk.BOTH, expand=True)
+
+def abrir_inicio():
+    mostrar_frame(main_frame)
+
+def abrir_configuracion():
+    mostrar_frame(config_frame)
+    config = configparser.ConfigParser()
+    config.read(ruta('config.ini'))
+    gemini_api_key = config.get('API', 'geminiapikey')
+    text_gemini.insert(tk.END, gemini_api_key)
+
+def guardar_configuracion():
+
+    nuevo_gemini_api_key = text_gemini.get("1.0", tk.END).strip()  # Obtener todo el texto y eliminar espacios en blanco
+
+    # Leer el archivo de configuración actual
+    config = configparser.ConfigParser()
+    config.read(ruta('config.ini'))
+    
+    # Actualizar la clave geminiapikey con el nuevo valor
+    if 'API' not in config:
+        config.add_section('API')
+    config.set('API', 'geminiapikey', nuevo_gemini_api_key)
+    
+    # Guardar los cambios en el archivo de configuración
+    with open(ruta('config.ini'), 'w') as configfile:
+        config.write(configfile)
+
 # Crear la ventana principal
 root = tk.Tk()
 root.title("Asistente")
@@ -50,20 +86,39 @@ root.geometry("500x150")
 root.configure(bg='#383838')
 root.resizable(False, False)
 
-# Cargar la imagen en formato
+# Crear el menú principal
+menubar = tk.Menu(root, bg='#565656', fg='white', activebackground='#4E4E4E', activeforeground='white')
+config_menu = tk.Menu(menubar, tearoff=0)
+menubar.add_command(label="Inicio", command=abrir_inicio)
+menubar.add_command(label="Opciones", command=abrir_configuracion)
+root.config(menu=menubar)
+
+# pantalla de inicio
+main_frame = tk.Frame(root, bg='#383838')
 ruta_imagen = ruta('media/microfono.png')
 imagen = tk.PhotoImage(file=ruta_imagen)
 imagen = imagen.subsample(7, 7)
 
 # Crear un widget de etiqueta para mostrar la imagen
-microfono = tk.Button(root, image=imagen, relief='flat', command=asistente, bg='#383838')
+microfono = tk.Button(main_frame, image=imagen, relief='flat', command=asistente, bg='#383838')
 microfono.place(relx=0.02, rely=0.5, anchor=tk.W)
-
 root.bind("<space>", lambda event: microfono.invoke())
 
 # Crear una etiqueta para mostrar el mensaje
-mensaje = tk.Label(root, text="",  font=("Arial", 15), wraplength=300, fg='white', bg='#383838')
+mensaje = tk.Label(main_frame, text="",  font=("Arial", 15), wraplength=300, fg='white', bg='#383838')
 mensaje.pack(side=tk.RIGHT, padx=10)
+
+
+# pantalla de configuracion
+config_frame = tk.Frame(root, bg='#383838')
+label_gemini = tk.Label(config_frame, text="Ingrese su API de Gemini:")
+label_gemini.pack(pady=5)
+text_gemini = tk.Text(config_frame, width=40, height=1)
+text_gemini.pack(pady=5)
+guardar_btn = tk.Button(config_frame, text="Guardar", command=guardar_configuracion, bg='#565656', fg='white')
+guardar_btn.pack(pady=10)
+
+mostrar_frame(main_frame)
 
 # Ejecutar el bucle principal de Tkinter
 root.mainloop()

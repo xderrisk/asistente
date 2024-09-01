@@ -1,10 +1,14 @@
+from rutas import ruta
+import configparser
 import requests
-from apis import Weather_API
 class Clima:
     def __init__(self):
         self.obtener_clima
 
     def obtener_clima(self):
+        config = configparser.ConfigParser()
+        config.read(ruta('config.ini'))
+        Weather_API = config.get('API', 'weatherapikey')
         clave_api = Weather_API
         ciudad = 'Jipijapa'
         pais = "EC"

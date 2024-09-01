@@ -1,10 +1,11 @@
 import google.generativeai as genai
-from apis import Gemini_API
 from tiempo import Tiempo
 from clima import Clima
 from programas import Programas
 from web import Abrir
-from musica import reproducir
+from musica import Reproducir
+from rutas import ruta
+import configparser
 import platform
 import distro
 
@@ -14,6 +15,9 @@ class ChatIAGenerativa:
         self.setup_model()
 
     def configure(self):
+        config = configparser.ConfigParser()
+        config.read(ruta('config.ini'))
+        Gemini_API = config.get('API', 'geminiapikey')
         genai.configure(api_key=Gemini_API)
         self.instrucciones = """
         Eres un asistente ironico pero siempre da una respuesta correcta a todo de forma breve,
@@ -116,8 +120,8 @@ class ChatIAGenerativa:
                                           nombre de la canción""")
         print(response.text)
         cancion = response.text.strip().lower()
-        return reproducir().youtube_music(cancion)
+        return Reproducir().youtube_music(cancion)
     
 if __name__ == "__main__":
-    respuesta = ChatIAGenerativa().send_message("abre firefox")
+    respuesta = ChatIAGenerativa().send_message("reproduce rasputin")
     print(respuesta)

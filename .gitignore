@@ -1,8 +1,8 @@
 /.venv
 /src/__pycache__
-/src/apis.py
 /media/grabacion.wav
 /media/voz.mp3
-*.spec
+/*.spec
+/*.ini
 /build
 /dist
