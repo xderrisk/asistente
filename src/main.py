@@ -10,7 +10,7 @@ class AsistenteApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Asistente")
-        self.root.geometry("500x150")
+        self.root.geometry("500x200")
         self.root.configure(bg='#383838')
         self.root.resizable(False, False)
 
@@ -55,16 +55,23 @@ class AsistenteApp:
             self.label = tk.Label(self.bienvenida_frame, text="¡Bienvenido!", font=("Helvetica", 16), fg='white', bg='#383838')
             self.label.pack(pady=5)
 
-            self.label = tk.Label(self.bienvenida_frame, text="Ingresa tu API de Gemini", font=("Helvetica", 16), fg='white', bg='#383838')
-            self.label.pack(pady=5)
+            self.label = tk.Label(self.bienvenida_frame, text="Ingresa tu API de Gemini", fg='white', bg='#383838')
+            self.label.pack(pady=3)
 
             self.text_gemini = tk.Entry(self.bienvenida_frame, width=50)
-            self.text_gemini.pack(pady=5)
+            self.text_gemini.pack(pady=3)
+
+            self.label = tk.Label(self.bienvenida_frame, text="Ingrese su ubicación actual", fg='white', bg='#383838')
+            self.label.pack(pady=3)
+
+            self.text_ubicacion = tk.Entry(self.bienvenida_frame, width=50)
+            self.text_ubicacion.pack(pady=3)
             
             self.button = tk.Button(self.bienvenida_frame, text="Guardar", command=self.finalizar_bienvenida, bg='#565656', fg='white', state=tk.DISABLED)
             self.button.pack(pady=10)
 
             self.text_gemini.bind("<KeyRelease>", self.verificar_entrada)
+            self.text_ubicacion.bind("<KeyRelease>", self.verificar_entrada)
 
             self.bienvenida_frame.pack(fill=tk.BOTH, expand=True)
 
