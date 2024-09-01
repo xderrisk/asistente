@@ -1,0 +1,7 @@
+Package: asistente
+Version: 1.0
+Section: base
+Priority: optional
+Architecture: amd64
+Maintainer: Sergio Galarza <sergiowgp@outlook.com>
+Description: Asistente que usa la api de Gemini.

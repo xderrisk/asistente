@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Asistente
+Comment=Asistente de voz
+Exec=/usr/bin/asistente
+Icon=/opt/asistente/_internal/media/bot.png
+Terminal=false
+Type=Application
+Categories=Utility;

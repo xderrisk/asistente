@@ -5,4 +5,5 @@
 /*.spec
 /*.ini
 /build
-/dist
+/dist/asistente/opt
+/dist/asistente.deb
