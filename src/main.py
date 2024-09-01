@@ -54,14 +54,16 @@ def abrir_inicio():
 
 def abrir_configuracion():
     mostrar_frame(config_frame)
-    config = configparser.ConfigParser()
-    config.read(ruta('config.ini'))
-    gemini_api_key = config.get('API', 'geminiapikey')
-    text_gemini.insert(tk.END, gemini_api_key)
+    if not text_gemini.get().strip():
+        config = configparser.ConfigParser()
+        config.read(ruta('config.ini'))
+        gemini_api_key = config.get('API', 'geminiapikey', fallback='')
+        if gemini_api_key:
+            text_gemini.insert(tk.END, gemini_api_key)
 
 def guardar_configuracion():
 
-    nuevo_gemini_api_key = text_gemini.get("1.0", tk.END).strip()  # Obtener todo el texto y eliminar espacios en blanco
+    nuevo_gemini_api_key = text_gemini.get().strip()  # Obtener todo el texto y eliminar espacios en blanco
 
     # Leer el archivo de configuración actual
     config = configparser.ConfigParser()
@@ -113,7 +115,7 @@ mensaje.pack(side=tk.RIGHT, padx=10)
 config_frame = tk.Frame(root, bg='#383838')
 label_gemini = tk.Label(config_frame, text="Ingrese su API de Gemini:")
 label_gemini.pack(pady=5)
-text_gemini = tk.Text(config_frame, width=40, height=1)
+text_gemini = tk.Entry(config_frame, width=40)
 text_gemini.pack(pady=5)
 guardar_btn = tk.Button(config_frame, text="Guardar", command=guardar_configuracion, bg='#565656', fg='white')
 guardar_btn.pack(pady=10)
