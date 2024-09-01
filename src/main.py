@@ -52,6 +52,10 @@ def mostrar_frame(frame_a_mostrar):
 def abrir_inicio():
     mostrar_frame(main_frame)
 
+def manejar_espacio(event):
+    if main_frame.winfo_ismapped():
+        microfono.invoke()
+
 def abrir_configuracion():
     mostrar_frame(config_frame)
     if not text_gemini.get().strip():
@@ -122,5 +126,6 @@ guardar_btn.pack(pady=10)
 
 mostrar_frame(main_frame)
 
-# Ejecutar el bucle principal de Tkinter
+root.bind("<space>", manejar_espacio)
+
 root.mainloop()
