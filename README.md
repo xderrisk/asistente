@@ -5,10 +5,8 @@ abrir aplicaciones, dar respuesta a preguntas, reproducir música.
 
 ### APIs:
 - Gemini
-- OpenWeatherMap
 
 ### Bibliotecas PIP:
-- tkinter
 - google-generativeai
 - speechrecognition
 - gtts
@@ -45,18 +43,13 @@ Instala los requerimientos pip
 ```bash
 pip install -r requirements.txt
 ```
-Crea un script llamado ```apis.py``` en la carpeta ```src``` y agrega tu api key de Gemini y OpenWeatherMap
-```python
-Gemini_API = ""
-Weather_API = ""
-```
 
 ## Como funciona?
-1. El programa inicia en la carpeta ```src``` con el script [main.py](src/main.py) donde se muestra un botón de micrófono y un label para mostrar los resultados del asistente
+1. El programa inicia en la carpeta ```src``` con el script [main.py](src/main.py) donde deberá ingresar por primera vez su API de Gemini y su ubicación y guardar, en el inicio se muestra un botón de micrófono y un label para mostrar los resultados del asistente
 
 2. Al tocar el micrófono se inicia [grabadora.py](src/grabadora.py) que guarda la grabación en la carpeta ```media``` y lo convierte a texto
 
-3. Si se reconoce lo que dice el audio grabado se lleva el texto a [ia.py](src/ia.py) que usa la api de Gemini ubicada en ```src/apis.py```
+3. Si se reconoce lo que dice el audio grabado se lleva el texto a [ia.py](src/ia.py) que usa la api de Gemini
 
 4. Según lo solicitado gracias a las funciones de Gemini podrá [decir la hora y fecha actual](src/tiempo.py), [decir el clima](src/clima.py), [abrir programas](src/programas.py), [abrir paginas web](src/web.py), [reproducir música](src/musica.py) o simplemente responder a preguntas
 
