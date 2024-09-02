@@ -113,7 +113,7 @@ class ChatIAGenerativa:
         if sistema == "Linux":
             sabor = distro.name()
         else:
-            sabor == platform.version()
+            sabor = platform.version()
         try:
             model = genai.GenerativeModel(model_name="gemini-1.5-flash")
             response = model.generate_content(f"""Dado el nombre de un programa como(ignora "abre"): '{self.message}',
