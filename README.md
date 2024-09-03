@@ -61,6 +61,11 @@ Ejecuta este comando en tu entorno virtual Python
 pyinstaller --windowed --icon=media/bot.png --name=asistente --add-data=media/bot.png:media --add-data=media/microfono.png:media --add-data=media/run.mp3:media --add-data=media/stop.mp3:media src/main.py
 ```
 ## Empaquetar a .deb
+Mover el ejecutable
+```bash
+mv dist/asistente/asistente dist/asistente/_internal /deb/asistente/opt/asistente
+```
+Crear deb
 ```bash
 dpkg-deb --build deb/asistente
 ```
