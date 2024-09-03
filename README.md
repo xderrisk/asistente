@@ -60,3 +60,4 @@ Ejecuta este comando en tu entorno virtual Python
 ```bash
 pyinstaller --windowed --icon=media/bot.png --name=asistente --add-data=media/bot.png:media --add-data=media/microfono.png:media --add-data=media/run.mp3:media --add-data=media/stop.mp3:media src/main.py
 ```
+# apt
