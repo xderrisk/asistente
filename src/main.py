@@ -40,6 +40,8 @@ class AsistenteApp:
         menubar = tk.Menu(self.root, bg='#565656', fg='white', activebackground='#4E4E4E', activeforeground='white')
         menubar.add_command(label="Inicio", command=self.abrir_inicio)
         menubar.add_command(label="Opciones", command=self.abrir_configuracion)
+        menubar.add_command(label="Ayuda", command=self.abrir_ayuda)
+        menubar.add_command(label="Acerca", command=self.abrir_acerca)
         self.root.config(menu=menubar)
 
     def mostrar_frame(self, frame_a_mostrar):
@@ -191,6 +193,24 @@ class AsistenteApp:
             self.config.write(configfile)
 
         self.button.config(state=tk.DISABLED)
+
+    def abrir_ayuda(self):
+        if not self.help_frame:
+            self.help_frame = tk.Frame(self.root, bg='#383838')
+            
+            label_help = tk.Label(self.help_frame, text="Ayuda")
+            label_help.pack(pady=3)
+            
+        self.mostrar_frame(self.help_frame)
+
+    def abrir_acerca(self):
+        if not self.about_frame:
+            self.about_frame = tk.Frame(self.root, bg='#383838')
+            
+            label_help = tk.Label(self.about_frame, text="Acerca")
+            label_help.pack(pady=3)
+            
+        self.mostrar_frame(self.about_frame)
 
 if __name__ == "__main__":
     root = tk.Tk()
