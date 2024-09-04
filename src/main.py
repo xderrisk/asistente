@@ -17,6 +17,8 @@ class AsistenteApp:
         self.bienvenida_frame = None
         self.main_frame = None
         self.config_frame = None
+        self.help_frame = None
+        self.about_frame = None
 
         self.config = configparser.ConfigParser()
         self.config.read(ruta('config.ini'))
@@ -45,7 +47,11 @@ class AsistenteApp:
         self.root.config(menu=menubar)
 
     def mostrar_frame(self, frame_a_mostrar):
-        for frame in [self.bienvenida_frame, self.main_frame, self.config_frame]:
+        for frame in [self.bienvenida_frame,
+                      self.main_frame,
+                      self.config_frame,
+                      self.help_frame,
+                      self.about_frame]:
             if frame:
                 frame.pack_forget()
         frame_a_mostrar.pack(fill=tk.BOTH, expand=True)
@@ -74,8 +80,6 @@ class AsistenteApp:
 
             self.text_gemini.bind("<KeyRelease>", self.verificar_entrada)
             self.text_ubicacion.bind("<KeyRelease>", self.verificar_entrada)
-
-            self.bienvenida_frame.pack(fill=tk.BOTH, expand=True)
 
         self.mostrar_frame(self.bienvenida_frame)
 
