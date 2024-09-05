@@ -1,5 +1,6 @@
 import tkinter as tk
 import configparser
+import webbrowser
 import threading
 from grabadora import GrabadoraVoz
 from ia import ChatIAGenerativa
@@ -60,22 +61,31 @@ class AsistenteApp:
         if not self.bienvenida_frame:
             self.bienvenida_frame = tk.Frame(self.root, bg='#383838')
 
-            self.label = tk.Label(self.bienvenida_frame, text="¡Bienvenido!", font=("Helvetica", 16), fg='white', bg='#383838')
+            self.label = tk.Label(self.bienvenida_frame,
+                                  text="¡Bienvenido!",
+                                  font=("Helvetica", 16), fg='white', bg='#383838')
             self.label.pack(pady=5)
 
-            self.label = tk.Label(self.bienvenida_frame, text="Ingresa tu API de Gemini", fg='white', bg='#383838')
+            self.label = tk.Label(self.bienvenida_frame,
+                                  text="Ingresa tu API de Gemini",
+                                  fg='white', bg='#383838')
             self.label.pack(pady=3)
 
             self.text_gemini = tk.Entry(self.bienvenida_frame, width=50)
             self.text_gemini.pack(pady=3)
 
-            self.label = tk.Label(self.bienvenida_frame, text="Ingrese su ubicación actual", fg='white', bg='#383838')
+            self.label = tk.Label(self.bienvenida_frame,
+                                  text="Ingrese su ubicación actual",
+                                  fg='white', bg='#383838')
             self.label.pack(pady=3)
 
             self.text_ubicacion = tk.Entry(self.bienvenida_frame, width=50)
             self.text_ubicacion.pack(pady=3)
             
-            self.button = tk.Button(self.bienvenida_frame, text="Guardar", command=self.finalizar_bienvenida, bg='#565656', fg='white', state=tk.DISABLED)
+            self.button = tk.Button(self.bienvenida_frame,
+                                    text="Guardar",
+                                    command=self.finalizar_bienvenida,
+                                    bg='#565656', fg='white', state=tk.DISABLED)
             self.button.pack(pady=10)
 
             self.text_gemini.bind("<KeyRelease>", self.verificar_entrada)
@@ -101,11 +111,17 @@ class AsistenteApp:
             imagen = tk.PhotoImage(file=ruta_imagen)
             imagen = imagen.subsample(7, 7)
 
-            self.microfono = tk.Button(self.main_frame, image=imagen, relief='flat', command=self.asistente, bg='#383838')
+            self.microfono = tk.Button(self.main_frame,
+                                       image=imagen, relief='flat',
+                                       command=self.asistente,
+                                       bg='#383838')
+            
             self.microfono.image = imagen  # Necesario para evitar que la imagen sea recolectada por el GC
             self.microfono.place(relx=0.02, rely=0.5, anchor=tk.W)
 
-            self.mensaje = tk.Label(self.main_frame, text="", font=("Arial", 15), wraplength=300, fg='white', bg='#383838')
+            self.mensaje = tk.Label(self.main_frame,
+                                    text="",
+                                    font=("Arial", 15), wraplength=300, fg='white', bg='#383838')
             self.mensaje.pack(side=tk.RIGHT, padx=10)
 
         self.mostrar_frame(self.main_frame)
@@ -152,19 +168,28 @@ class AsistenteApp:
         if not self.config_frame:
             self.config_frame = tk.Frame(self.root, bg='#383838')
             
-            label_gemini = tk.Label(self.config_frame, text="Ingrese su API de Gemini:")
+            label_gemini = tk.Label(self.config_frame,
+                                    text="Ingrese su API de Gemini:",
+                                    fg='white', bg='#383838')
             label_gemini.pack(pady=3)
 
-            self.text_gemini = tk.Entry(self.config_frame, width=50)
+            self.text_gemini = tk.Entry(self.config_frame,
+                                        width=50, fg='white', bg='#383838')
             self.text_gemini.pack(pady=3)
 
-            label_ubicacion = tk.Label(self.config_frame, text="Ingrese su ubicación:")
+            label_ubicacion = tk.Label(self.config_frame,
+                                       text="Ingrese su ubicación:",
+                                       fg='white', bg='#383838')
             label_ubicacion.pack(pady=3)
 
-            self.text_ubicacion = tk.Entry(self.config_frame, width=50)
+            self.text_ubicacion = tk.Entry(self.config_frame,
+                                           width=50, fg='white', bg='#383838')
             self.text_ubicacion.pack(pady=3)
 
-            self.button = tk.Button(self.config_frame, text="Guardar", command=self.guardar_configuracion, bg='#565656', fg='white', state=tk.DISABLED)
+            self.button = tk.Button(self.config_frame,
+                                    text="Guardar",
+                                    command=self.guardar_configuracion,
+                                    bg='#565656', fg='white', state=tk.DISABLED)
             self.button.pack(pady=3)
 
             self.text_gemini.bind("<KeyRelease>", self.verificar_entrada)
@@ -202,17 +227,51 @@ class AsistenteApp:
         if not self.help_frame:
             self.help_frame = tk.Frame(self.root, bg='#383838')
             
-            label_help = tk.Label(self.help_frame, text="Ayuda")
+            label_help = tk.Label(self.help_frame,
+                                  text="Aqui hay algunas cosas que te podrian ayudar:",
+                                  font=("bold"), fg='white', bg='#383838')
+            label_help.pack(pady=3)
+
+            label_help = tk.Label(self.help_frame,
+                                  text="Consiga su API de Gemini en https://aistudio.google.com/app/apikey",
+                                  fg='white', bg='#383838')
+            label_help.pack(pady=3)
+
+            boton_help = tk.Button(self.help_frame,
+                                   text="ir al enlace",
+                                   command=self.web_api_gemini, fg='white', bg='#383838')
+            boton_help.pack(pady=3)
+
+            label_help = tk.Label(self.help_frame,
+                                  text="Agregue su API key en opciones",
+                                  fg='white', bg='#383838')
             label_help.pack(pady=3)
             
         self.mostrar_frame(self.help_frame)
 
+    def web_api_gemini(self):
+        webbrowser.open_new("https://aistudio.google.com/app/apikey")
+
     def abrir_acerca(self):
         if not self.about_frame:
             self.about_frame = tk.Frame(self.root, bg='#383838')
+
+            label_help = tk.Label(self.about_frame,
+                                  text="Acerca del proyecto",
+                                  font=("bold"), fg='white', bg='#383838', anchor="w")
+            label_help.pack(fill=tk.X, pady=3)
             
-            label_help = tk.Label(self.about_frame, text="Acerca")
-            label_help.pack(pady=3)
+            label_help = tk.Label(self.about_frame,
+                                  text="Asistente hecho con Python que usa la API de Gemini",
+                                  fg='white', bg='#383838', anchor="w").pack(fill=tk.X, pady=3)
+
+            label_help = tk.Label(self.about_frame,
+                                  text="Desarrolador: Sergio Galarza",
+                                  fg='white', bg='#383838', anchor="w").pack(fill=tk.X, pady=3)
+
+            label_help = tk.Label(self.about_frame,
+                                  text="GitHub: xderrisk",
+                                  fg='white', bg='#383838', anchor="w").pack(fill=tk.X, pady=3)
             
         self.mostrar_frame(self.about_frame)
 
