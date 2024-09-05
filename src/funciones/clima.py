@@ -1,6 +1,9 @@
 import requests
 import configparser
 from bs4 import BeautifulSoup
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from rutas import ruta
 
 class Clima:

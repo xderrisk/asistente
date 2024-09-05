@@ -1,5 +1,5 @@
 /.venv
-/src/__pycache__
+**/__pycache__/
 /media/grabacion.wav
 /media/voz.mp3
 /*.spec

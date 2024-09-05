@@ -1,9 +1,9 @@
 import google.generativeai as genai
-from tiempo import Tiempo
-from clima import Clima
-from programas import Programas
-from web import Abrir
-from musica import Reproducir
+from funciones.tiempo import Tiempo
+from funciones.clima import Clima
+from funciones.programas import Programas
+from funciones.web import Abrir
+from funciones.musica import Reproducir
 from rutas import ruta
 import configparser
 import platform
