@@ -9,19 +9,26 @@ from rutas import ruta
 def crear_config_frame(app):
     frame = tk.Frame(app.root, bg='#383838')
 
-    label_gemini = tk.Label(frame, text="Ingrese su API de Gemini:", fg='white', bg='#383838')
-    label_gemini.pack(pady=3)
+    tk.Label(frame,
+             text="Ingrese su API de Gemini:",
+             fg='white', bg='#383838'
+             ).pack(pady=3)
 
     text_gemini = tk.Entry(frame, width=50, fg='white', bg='#383838')
     text_gemini.pack(pady=3)
 
-    label_ubicacion = tk.Label(frame, text="Ingrese su ubicación:", fg='white', bg='#383838')
-    label_ubicacion.pack(pady=3)
+    tk.Label(frame,
+             text="Ingrese su ubicación:",
+             fg='white', bg='#383838'
+             ).pack(pady=3)
 
     text_ubicacion = tk.Entry(frame, width=50, fg='white', bg='#383838')
     text_ubicacion.pack(pady=3)
 
-    button = tk.Button(frame, text="Guardar", command=lambda: app.guardar_configuracion(), bg='#565656', fg='white', state=tk.DISABLED)
+    button = tk.Button(frame,
+                       text="Guardar",
+                       command=lambda: app.guardar_configuracion(),
+                       bg='#565656', fg='white', state=tk.DISABLED)
     button.pack(pady=3)
 
     text_gemini.bind("<KeyRelease>", lambda event: app.verificar_entrada())

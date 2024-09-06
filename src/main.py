@@ -141,6 +141,9 @@ class AsistenteApp:
     def web_api_gemini(self):
         webbrowser.open_new("https://aistudio.google.com/app/apikey")
 
+    def github_repo(self):
+        webbrowser.open_new("https://github.com/xderrisk/asistente")
+
     def abrir_acerca(self):
         if not self.about_frame:
             from frames.acerca import crear_acerca_frame
