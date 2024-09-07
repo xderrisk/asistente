@@ -1,10 +1,4 @@
 import tkinter as tk
-import sys
-import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from rutas import ruta
 
 def crear_config_frame(app):
     frame = tk.Frame(app.root, bg='#383838')
@@ -49,16 +43,3 @@ def crear_config_frame(app):
             app.text_ubicacion.insert(tk.END, ubi)
 
     return frame
-
-def guardar_configuracion(app):
-
-    app.config['API'] = {
-        'geminiapikey': app.text_gemini.get().strip()  # Cambiado 'gemini' a 'geminiapikey'
-    }
-
-    app.config['DATA'] = {
-        'ubicacion': app.text_ubicacion.get().strip()
-    }
-
-    with open(ruta('config.ini'), 'w') as configfile:
-        app.config.write(configfile)

@@ -129,8 +129,16 @@ class AsistenteApp:
         self.mostrar_frame(self.config_frame)
 
     def guardar_configuracion(self):
-        from frames.configuracion import guardar_configuracion
-        guardar_configuracion(self)
+        self.config['API'] = {
+            'geminiapikey': self.text_gemini.get().strip()
+        }
+    
+        app.config['DATA'] = {
+            'ubicacion': self.text_ubicacion.get().strip()
+        }
+    
+        with open(ruta('config.ini'), 'w') as configfile:
+            app.config.write(configfile)
 
     def abrir_ayuda(self):
         if not self.help_frame:

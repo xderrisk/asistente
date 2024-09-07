@@ -36,9 +36,4 @@ def crear_bienvenida_frame(app):
     app.button = button
 
     return frame
-
-def verificar_entrada(app, *args):
-    if app.text_gemini.get().strip() or app.text_ubicacion.get().strip():
-        app.button.config(state=tk.NORMAL)
-    else:
-        app.button.config(state=tk.DISABLED)
+    
