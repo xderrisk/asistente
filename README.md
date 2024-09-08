@@ -22,9 +22,6 @@ abrir aplicaciones, dar respuesta a preguntas, reproducir música.
 - python3-venv
 - python3-tk
 
-### Requerimientos en Windows:
-- Instalar Python
-
 ## Como usarlo?
 Crea un entorno virtual Python en la carpeta raíz del proyecto
 ```bash
@@ -32,12 +29,7 @@ python3 -m venv .venv
 ```
 Activa el entorno virtual Python
 ```bash
-# en Linux
 source .venv/bin/activate
-```
-```bash
-# en Windows
-.venv\Scripts\activate.bat
 ```
 Instala los requerimientos pip
 ```bash
@@ -63,7 +55,7 @@ pyinstaller --windowed --icon=media/bot.png --name=asistente --add-data=media/bo
 ## Empaquetar a .deb
 Mover el ejecutable
 ```bash
-mv dist/asistente/asistente dist/asistente/_internal /deb/asistente/opt/asistente
+rm -rf ./deb/asistente/opt/* && mv ./dist/* ./deb/asistente/opt/
 ```
 Crear deb
 ```bash
