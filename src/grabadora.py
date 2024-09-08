@@ -5,7 +5,6 @@ import sounddevice as sd
 import numpy as np
 import threading
 import wavio
-import platform
 import time
 import os
 
@@ -28,7 +27,7 @@ class GrabadoraVoz:
 
         os.remove(self.nombre_archivo)
 
-        self.reproducir_sonido('media/stop.mp3')
+        playsound(ruta('media/stop.mp3'))
 
     def iniciar_grabacion(self):
         self.frames = []
@@ -36,8 +35,8 @@ class GrabadoraVoz:
         self.ultimo_sonido = time.time()
         self.hilo_grabacion = threading.Thread(target=self.grabar)
         self.hilo_grabacion.start()
-
-        self.reproducir_sonido('media/run.mp3')
+        print("Grabando...")
+        playsound(ruta('media/run.mp3'))
 
     def grabar(self):
         self.stream = sd.InputStream(samplerate=self.frecuencia_muestreo, channels=self.canales, callback=self.callback)
@@ -79,7 +78,6 @@ class GrabadoraVoz:
 
         try:
             text = self.recognizer.recognize_google(audio, language="es-ES")
-            print(text)
             return text
         except sr.UnknownValueError:
             text = "No se pudo entender el audio"
@@ -87,21 +85,6 @@ class GrabadoraVoz:
         except sr.RequestError as e:
             text = "No se pudo conectar con el servicio"
             return text
-        
-    def reproducir_sonido(self, archivo):
-        """Reproduce un sonido de inicio o finalización."""
-        archivo_sonido = ruta(archivo)
-        if os.path.exists(archivo_sonido):
-            sistema = platform.system()
-            try:
-                if sistema == "Linux":
-                    os.system(f"mpg321 {archivo_sonido}")
-                else:
-                    playsound(archivo_sonido)
-            except Exception as e:
-                print(f"Error al reproducir sonido: {e}")
-        else:
-            print(f"Archivo de sonido no encontrado: {archivo_sonido}")
 
 if __name__ == "__main__":
     grabacion = GrabadoraVoz()

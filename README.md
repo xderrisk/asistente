@@ -18,9 +18,9 @@ abrir aplicaciones, dar respuesta a preguntas, reproducir música.
 - pyinstaller
 
 ### Requerimientos en Linux:
+- python3
 - python3-venv
 - python3-tk
-- mpg321
 
 ### Requerimientos en Windows:
 - Instalar Python

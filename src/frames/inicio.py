@@ -6,6 +6,8 @@ def crear_inicio_frame(app):
     microfono = tk.Button(frame,
                           image=app.imagen,
                           relief='flat',
+                          highlightbackground="#383838",
+                          activebackground="#383838",
                           command=app.asistente,
                           bg='#383838')
     microfono.image = app.imagen

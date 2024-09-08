@@ -1,7 +1,6 @@
 from playsound import playsound
 from rutas import ruta
 from gtts import gTTS
-import platform
 import os
 
 class TextoAVoz:
@@ -10,16 +9,7 @@ class TextoAVoz:
         tts = gTTS(text=texto, lang='es')
         ruta_voz = ruta('media/voz.mp3')
         tts.save(ruta_voz)
-
-        sistema = platform.system()
-
-        if sistema == "Linux":
-            # Reproducir el archivo de audio en Linux
-            os.system(f"mpg321 {ruta_voz}")
-        else:
-            # Reproducir el archivo de audio en Windows
-            playsound(ruta_voz)
-            
+        playsound(ruta_voz)
         os.remove(ruta_voz)
 
 if __name__ == "__main__":

@@ -68,7 +68,7 @@ class AsistenteApp:
             self.bienvenida_frame = crear_bienvenida_frame(self)
         self.mostrar_frame(self.bienvenida_frame)
 
-    def verificar_entrada(self, *args):
+    def verificar_entrada(self):
         if self.text_gemini.get().strip() or self.text_ubicacion.get().strip():
             self.button.config(state=tk.NORMAL)
         else:
@@ -139,6 +139,8 @@ class AsistenteApp:
     
         with open(ruta('config.ini'), 'w') as configfile:
             app.config.write(configfile)
+
+        self.button.config(state=tk.DISABLED)
 
     def abrir_ayuda(self):
         if not self.help_frame:
