@@ -12,7 +12,7 @@ abrir aplicaciones, dar respuesta a preguntas, reproducir música.
 - gtts
 - sounddevice
 - wavio
-- playsound
+- pydub
 - pywhatkit
 - distro
 - pyinstaller
