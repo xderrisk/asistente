@@ -56,7 +56,7 @@ pyinstaller --windowed --icon=media/bot.png --name=asistente --add-data=media/bo
 ## Empaquetar a .deb
 Mover el ejecutable
 ```bash
-rm -rf ./deb/asistente/opt/* && mv ./dist/* ./deb/asistente/opt/
+rm -rf ./deb/asistente/opt && mkdir -p ./deb/asistente/opt && mv ./dist/asistente ./deb/asistente/opt
 ```
 Crear deb
 ```bash
