@@ -1,6 +1,4 @@
 from rutas import ruta
-from pydub.playback import play
-from pydub import AudioSegment
 import speech_recognition as sr
 import sounddevice as sd
 import numpy as np
@@ -14,6 +12,9 @@ class GrabadoraVoz:
         self.frecuencia_muestreo = 44100
         self.canales = 2
         self.nombre_archivo = ruta('media/grabacion.wav')
+        self.ruta_stop = ruta('media/run.mp3')
+        self.ruta_run = ruta('media/stop.mp3')
+
         self.frames = []
         self.grabando = False
         self.ultimo_sonido = time.time()
@@ -28,7 +29,7 @@ class GrabadoraVoz:
 
         os.remove(self.nombre_archivo)
 
-        play(AudioSegment.from_file(ruta('media/stop.mp3')))
+        os.system(f'mpg123 {self.ruta_stop}')
 
     def iniciar_grabacion(self):
         self.frames = []
@@ -36,8 +37,8 @@ class GrabadoraVoz:
         self.ultimo_sonido = time.time()
         self.hilo_grabacion = threading.Thread(target=self.grabar)
         self.hilo_grabacion.start()
+        os.system(f'mpg123 {self.ruta_run}')
         print("Grabando...")
-        play(AudioSegment.from_file(ruta('media/run.mp3')))
 
     def grabar(self):
         self.stream = sd.InputStream(samplerate=self.frecuencia_muestreo, channels=self.canales, callback=self.callback)
