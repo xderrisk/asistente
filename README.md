@@ -9,18 +9,19 @@ abrir aplicaciones, dar respuesta a preguntas, reproducir música.
 ### Bibliotecas PIP:
 - google-generativeai
 - speechrecognition
-- gtts
 - sounddevice
 - wavio
-- pydub
-- pywhatkit
+- gtts
 - distro
+- pywhatkit
 - pyinstaller
 
 ### Requerimientos en Linux:
 - python3
 - python3-venv
 - python3-tk
+- mpg123
+- portaudio19-dev
 
 ## Como usarlo?
 Crea un entorno virtual Python en la carpeta raíz del proyecto
