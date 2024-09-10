@@ -3,6 +3,6 @@ Version: 1.0-beta
 Section: base
 Priority: optional
 Architecture: amd64
-Depends: portaudio19-dev
+Depends: portaudio19-dev, mpg123
 Maintainer: Sergio Galarza <sergiowgp@outlook.com>
 Description: Asistente que usa la api de Gemini.
